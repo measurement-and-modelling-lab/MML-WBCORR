@@ -1,0 +1,49 @@
+<br>
+
+<p><b>Formatting your input</b></p>
+
+<p>Data and hypothesis matrices should be in headerless, comma-separated (.csv) format. Your .csv file may need a blank line at the end depending on the text editor or program which produced it. An app for producing properly-formatted data and hypothesis files is provided <a href="https://shiny.rcg.sfu.ca/u/pserafin/csvgenerator/"><font color="#00ca8a">here</font></a>. Here are six lines from a raw data file:</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.24,2.61,0.260,1.05,7.55,0.2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.280,2.36,1.19,1.66,0.470,0.460<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.370,0.820,3.23,0.120,4.57,1.84<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.110,5.73,3.04,1.04,0.380,0.350<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10.750,2.66,2.62,0.290,4.12,0.380</p>
+
+<p>Each row is a participant or observation and each column is a variable. There should not be an ID column. Here is a sample correlation data file:</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.0,,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.2,1.0,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.3,0.4,1.0</p>
+
+<p>Data from the upper half of the correlation matrix is optional, but the commas which would have separated the absent data are not. In SPSS, to produce a plain correlation matrix (without N or sig.), use the following syntax:</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FACTOR<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /VARIABLES v1 v2 v3<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /MISSING LISTWISE<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /ANALYSIS v1 v2 v3<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /PRINT CORRELATION<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /ROTATION NOROTATE<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /METHOD=CORRELATION .</p>
+
+<p>Here is a sample hypothesis file:</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1,2,1,1,0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1,3,1,1,0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1,3,2,0,0.2</p>
+
+<p>Each row of the hypothesis matrix is of the form: group, row, column, parameter tag, fixed value. The first three columns specify a correlation, and the fourth and fifth make an assertion about the value of that correlation. Correlations with the same positive integer in the parameter tag column are hypothesised to be equal, and correlations with a parameter tag of 0 are hypothesised to be equal to the value of their fixed value column. Note that correlations with different parameter tags are not hypothesised to be unequal.</p>
+
+<p>Take the first row. The first three columns specify the correlation in correlation matrix 1 at row 2 of column 1 (&rho;<sub>21</sub> or &rho;<sub>1<sub>21</sub></sub>). Put differently, they pick out the correlation in group 1 between variable 2 and variable 1. This correlation has a parameter tag of 1, so it is hypothesised to be equal to the correlation picked out by the second row, which also has a parameter tag of 1. On the other hand, the correlation in the third row is hypothesised to be equal to 0.2.</p>
+
+<p><a href="http://www.statpower.net/Steiger%20Biblio/Steiger03.PDF#page=28" target="_blank"><font color="#00ca8a">Steiger (2004)</font></a> gives examples of several hypotheses which can be tested using WBCORR. An archive of the corresponding input files is available <a href="http://174.138.81.196:3838/downloads/wbcorr_examples.zip"><font color="#00ca8a">here</font></a>.</p>
+
+<p><b>Other considerations</b></p>
+
+<p>GLS and TSGLS assume multivariate normality. Neither ADF nor TSADF assume multivariate normality, but they require sample estimates of fourth-order moments and so they are not compatible with correlation data or pairwise deletion. Also, because these estimates have large standard errors for small to moderate sample sizes, employing ADF or TSADF may result in a considerable loss of power: they should only be used if the assumption of multivariate normality is untenable. Whether GLS or ADF, the two-step procedure is to be preferred unless N is very large or the null hypothesis is expected to be false by a wide margin.</p>
+
+<p>A test of multivariate normality is provided if you are using raw data: <a href="http://www.tandfonline.com/doi/pdf/10.1207/S15327906MBR3903_2" target="_blank"><font color="#00ca8a">Yuan, Lambert & Fouladi's (2004)</font></a> if pairwise deletion is employed, and <a href="https://www.jstor.org/stable/2334770" target="_blank"><font color="#00ca8a">Mardia's (1970)</font></a> otherwise. If either test is statistically significant then multivariate normality is not supported. Yuan, Lambert & Fouladi's (2004) test is only useable if the observed marginals do not sit in a restricted range. A test of that assumption is provided for each variable with missing data, but only if there is at least one variable without missing data. Statistical significance indicates that the range of the observed marginals is restricted.</p>
+
+<p>Listwise and pairwise deletion are offered to deal with missing data. In pairwise deletion, the N for each group is the harmonic mean of the number of observed scores for each variable.</p>
+
+<br><br>
