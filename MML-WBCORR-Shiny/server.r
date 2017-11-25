@@ -33,10 +33,12 @@ shinyServer(function(input, output, session) {
     
     output$wbsctOutput <- eventReactive(input$runButton, {
 
+		# Import data files
         data <- list()
         for (i in 1:input$samples) {
             validate(need(eval(parse(text = paste0('input$datafile',i))), ""))
 
+			# Check that R can read the data file as a .csv
 			result = tryCatch({
 			  read.csv(file=eval(parse(text = paste0('input$datafile',i,'[[4]]'))), head=FALSE, sep=",")
 			}, warning = function(w) {
@@ -45,10 +47,9 @@ shinyServer(function(input, output, session) {
 			  'problem'
 			}, finally = {
 			})
-
 			if ('problem' %in% result) {
 			  return(capture.output(cat('<br>Error: There was an problem reading data file #', i, '; it may not be a .csv file.', sep="")))
-			} else {
+			} else { # If so import it as a matrix
 				data[[i]] <- as.matrix(read.csv(file=eval(parse(text = paste0('input$datafile',i,'[[4]]'))), head=FALSE, sep=","))
 			}
 
@@ -57,6 +58,7 @@ shinyServer(function(input, output, session) {
             }
         }
 
+		# Import N (calculate if raw data) for each group
         NList <- c()
         if (input$datatype == 'correlation') {
             for (i in 1:input$samples) {
@@ -69,6 +71,7 @@ shinyServer(function(input, output, session) {
             }
         }
 
+		# Check that hypothesis file is readable as a .csv
         validate(need(input$hypothesisfile, ""))
         result = tryCatch({
           read.csv(file=input$hypothesisfile[[4]], head=FALSE, sep=",")
@@ -78,16 +81,16 @@ shinyServer(function(input, output, session) {
           'problem'
         }, finally = {
         })
-        
         if ('problem' %in% result) {
           return(capture.output(cat('<br>Error: There was an problem reading the hypothesis file; it may not be a .csv file.', sep="")))
         } else {
           hypothesis <- as.matrix(read.csv(file=input$hypothesisfile[[4]], head=FALSE, sep=","))
         }
         
-        #if (is.vector(hypothesis)) {
-        #  hypothesis <- matrix(hypothesis, nrow=1, ncol=5)
-        #}
+		    # Should fix this
+        if (is.vector(hypothesis) || nrow(hypothesis) == 1) {
+          return(capture.output(cat('<br>Error: The hypothesis file must have more than one line.', sep="")))
+        }
         
         if (input$datatype == 'rawdata') {
           if (input$estimationmethod %in% c('ADF','TSADF')) {
