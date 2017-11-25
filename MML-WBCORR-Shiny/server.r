@@ -11,6 +11,7 @@ shinyServer(function(input, output, session) {
         HTML(html_ui)
     })
 
+	# Produce one data/file input for each group
     output$datafileInput <- renderUI({ 
         if (input$samples %in% 1:8) {
             html_ui <- " "
@@ -35,7 +36,22 @@ shinyServer(function(input, output, session) {
         data <- list()
         for (i in 1:input$samples) {
             validate(need(eval(parse(text = paste0('input$datafile',i))), ""))
-            data[[i]] <- as.matrix(read.csv(file=eval(parse(text = paste0('input$datafile',i,'[[4]]'))), head=FALSE, sep=","))
+
+			result = tryCatch({
+			  read.csv(file=eval(parse(text = paste0('input$datafile',i,'[[4]]'))), head=FALSE, sep=",")
+			}, warning = function(w) {
+			  'problem'
+			}, error = function(e) {
+			  'problem'
+			}, finally = {
+			})
+
+			if ('problem' %in% result) {
+			  return(capture.output(cat('<br>Error: There was an problem reading data file #', i, '; it may not be a .csv file.', sep="")))
+			} else {
+				data[[i]] <- as.matrix(read.csv(file=eval(parse(text = paste0('input$datafile',i,'[[4]]'))), head=FALSE, sep=","))
+			}
+
             if (ncol(data[[i]]) > 16) {
               return(capture.output(cat('<br>Error: WBCORR does not support more than 15 variables.', sep="")))
             }
