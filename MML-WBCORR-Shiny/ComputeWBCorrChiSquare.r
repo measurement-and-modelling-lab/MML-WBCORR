@@ -73,7 +73,6 @@ if (parametertags != c(0)) {
 }
 
 
-
 # Produce the correlation matrix using raw data, with pairwise deletion if requested
 if (datatype == 'rawdata'){
     RList <- list()
@@ -143,6 +142,8 @@ if (deletion == 'pairwise') {
     })
 }
 
+
+
 nMatrix <- MakeNMatrix(NList, hypothesis)
 
 delta <- MakeDeltaFromHypothesis(hypothesis)
@@ -167,8 +168,9 @@ for (kk in 1:rows) {
     RWLSList[[a]][[j,i]] <- WLSVec[[kk,1]]
 }
 
+
 # Replace correlations being assessed against the same fixed value with the mean of those correlations
-if (length(hypothesis[hypothesis[,4] == 0,] && estimationmethod %in% c('TSGLS','TSADF')) > 1) {
+if (nrow(hypothesis) > 1 && length(hypothesis[hypothesis[,4] == 0,]) > 1 && estimationmethod %in% c('TSGLS','TSADF')) {
     fixed_values <- unique(hypothesis[(hypothesis[,4]==0),][,5])
     for (f in fixed_values) {
         sub_hypothesis <- hypothesis[(hypothesis[,5]==f),]

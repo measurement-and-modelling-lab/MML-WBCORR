@@ -86,12 +86,7 @@ shinyServer(function(input, output, session) {
         } else {
           hypothesis <- as.matrix(read.csv(file=input$hypothesisfile[[4]], head=FALSE, sep=","))
         }
-        
-		    # Should fix this
-        if (is.vector(hypothesis) || nrow(hypothesis) == 1) {
-          return(capture.output(cat('<br>Error: The hypothesis file must have more than one line.', sep="")))
-        }
-        
+
         if (input$datatype == 'rawdata') {
           if (input$estimationmethod %in% c('ADF','TSADF')) {
               deletion <- input$deletion2
