@@ -48,7 +48,7 @@ shinyUI(fluidPage(theme = "simplex.css",
                       "))
     ),
 
-    headerPanel('MML WBCORR', windowTitle = 'MML - WBCORR'),
+    headerPanel('MML-WBCORR', windowTitle = 'MML-WBCORR'),
 
     sidebarLayout(
     sidebarPanel(
