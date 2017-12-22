@@ -3,15 +3,17 @@ function (data, datatype, hypothesis, deletion) {
     MakeSymmetricMatrix <- dget("MakeSymmetricMatrix.r")
 
     A <- length(data)
+	
+	if (ncol(hypothesis) != 5) {
+		cat('<br>Error: The hypothesis matrix has the wrong number of columns.')
+		return(invisible(TRUE))
+	}
 
     fixed <- hypothesis[,5]
     first4columns <- hypothesis[,-5]
     group_column <- hypothesis[,1]
 
-    if (ncol(hypothesis) != 5) {
-        cat('<br>Error: The hypothesis matrix has the wrong number of columns.')
-        return(invisible(TRUE))
-    } else if (is.numeric(hypothesis) == FALSE) {
+    if (is.numeric(hypothesis) == FALSE) {
         cat('<br>Error: The hypothesis matrix has a non-numeric entry.')
         return(invisible(TRUE))
     } else if ((length(fixed[fixed > 1]) + length(fixed[fixed < -1])) > 0) {
