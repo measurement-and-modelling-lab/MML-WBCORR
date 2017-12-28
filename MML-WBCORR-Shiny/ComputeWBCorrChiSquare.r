@@ -16,7 +16,8 @@ MultivariateSK <- dget("MultivariateSK.r")
 nCov <- dget("nCov.r")
 pairwiseMVN <- dget("pairwiseMVN.R")
 tablegen <- dget("tablegen.r")
-
+z <- dget("fisherz.R")
+	
 assess_range <- dget("assess_range.R")
 assess_mvn <- dget("assess_mvn.R")
 
@@ -235,7 +236,38 @@ if (nodelta == TRUE) {
     e <- rstar-delta%*%gammahatGLS
     pars <- nrow(gammahatGLS)
     df <- rows-pars
+	
+	
+	# Bonferroni correct confidence interval
+	number_of_parameters <- length(gammahatGLS)
+	corrected_alpha <- 0.05/number_of_parameters
+	critical_value <- qnorm(1-corrected_alpha/2)
+	ptags <- unique(hypothesis[,4])
+	ptags <- ptags[ptags != 0]
+	gammaGLS_ci <- ptags
+	for (p in ptags) {
+		oneparameterhypothesis <- hypothesis[hypothesis[,4] == p,, drop=FALSE]
+		group_column <- oneparameterhypothesis[,1]
+		if (max(group_column) == min(group_column)) {
+
+			groupnumber <- max(group_column)
+			groupn <- NList[[groupnumber]]
+			x <- gammahatGLS[p]
+			UL <- z(x) + critical_value*sqrt(1/(groupn-3))
+			UL <- tanh(UL)
+			UL <- round(UL, 3)
+			LL <- z(x) - critical_value*sqrt(1/(groupn-3))
+			LL <- tanh(LL)
+			LL <- round(LL, 3)
+
+			gammaGLS_ci[p] <- paste0('[',LL,', ',UL,']')
+
+		} else {
+				gammaGLS_ci[p] <- ''
+		}
+	}
 }
+
 
 temp <- t(e)%*%OmegaHatInverse%*%e
 fGLS <- temp[[1,1]]
@@ -267,6 +299,7 @@ printfunction <- function () {
     }
     
     hr()
+
     
     if (pars > 0) {
         gammahatDisplay <- matrix(0, nrow=pars, ncol=3)
@@ -291,8 +324,10 @@ printfunction <- function () {
             cat("<b>2-Stage ADF Parameter Estimates</b>\n\n")
         }
         cat('</div>')
+		
+		gammahatDisplay <- cbind(gammahatDisplay, gammaGLS_ci)
         
-        gammahatDisplay <- rbind(c("Parameter Tag", "Estimate", "Standard Error"), gammahatDisplay)
+        gammahatDisplay <- rbind(c("Parameter Tag", "Estimate", "Standard Error", paste0(100*(1-corrected_alpha),'% Confidence Interval')), gammahatDisplay)
         tablegen(gammahatDisplay,TRUE)
     }
     
