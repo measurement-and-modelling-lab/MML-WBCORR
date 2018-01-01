@@ -181,7 +181,7 @@ if (nrow(hypothesis) > 1 && length(hypothesis[hypothesis[,4] == 0,]) > 1 && esti
                     group <- sub_hypothesis[r,][1]
                     row <- sub_hypothesis[r,][2]
                     column <- sub_hypothesis[r,][3]
-                    sum <- sum + data[[group]][[row,column]]
+                    sum <- sum + RList[[group]][[row,column]]
             }
             mean <- sum/nrow(sub_hypothesis)
             for (r in 1:nrow(sub_hypothesis)) {
@@ -189,12 +189,10 @@ if (nrow(hypothesis) > 1 && length(hypothesis[hypothesis[,4] == 0,]) > 1 && esti
                     row <- sub_hypothesis[r,][2]
                     column <- sub_hypothesis[r,][3]
                     RWLSList[[group]][[row,column]] <- mean
-                    RList[[group]][[row,column]] <- mean
+                    RWLSList[[group]][[column,row]] <- mean
             }
         }
     }
-    RWLSList <- lapply(RWLSList, function(x) MakeSymmetricMatrix(x))
-    RList <- lapply(RList, function(x) MakeSymmetricMatrix(x))
 }
 
 Psi <- matrix(0, nrow=rows, ncol=rows)
