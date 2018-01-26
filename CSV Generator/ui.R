@@ -28,10 +28,10 @@ shinyUI(fluidPage(theme = "simplex.css",
       sliderInput("variables", "Number of variables:",
                   min = 2, max = 16, value = 2
       ),
-      conditionalPanel(condition = "input.tabs == 'Correlation Matrices'", helpText("Note: Right click on a correlation matrix to download it as a .csv file.")),
+      conditionalPanel(condition = "input.tabs == 'Correlation Matrices'", helpText("Note: Right click on a correlation matrix to download it as a .csv file. Unfortunately this feature does not work in all browsers, but it is confirmed to work in Firefox and Chrome.")),
       conditionalPanel(condition = "input.tabs == 'Hypothesis Matrix'", helpText("Note: Cells containing the same positive integer are hypothesised to be equal,
                                                                                   and cells containing a value between -1 and 1 are hypothesised to be equal to that value.
-                                                                                  Right click on the hypothesis matrix to download it as a .csv file."))
+                                                                                  Right click on the hypothesis matrix to download it as a .csv file. Unfortunately this feature does not work in all browsers, but it is confirmed to work in Firefox and Chrome."))
     ),
 
     mainPanel(
