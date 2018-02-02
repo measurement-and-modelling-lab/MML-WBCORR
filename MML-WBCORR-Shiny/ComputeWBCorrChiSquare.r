@@ -55,7 +55,7 @@ if (error == TRUE) {
 hypothesis <- hypothesis [order(hypothesis[,4]), , drop=FALSE]
 parametertags <- unique(hypothesis[,4])
 
-if (parametertags != c(0)) {
+if (!identical(parametertags, c(0))) {
 
   parametertags <- parametertags[parametertags != 0]
   num <- length(parametertags)
