@@ -32,7 +32,7 @@ function(data) {
         P1 = 1 - pchisq(MST,df)
 
         MKT = (b2p-(p*(p+2)*(n-1)/(n+1)))/(sqrt((8*p*(p+2))/n))
-        P2 = 2*(1-pnorm(MKT, 0, 1))
+        P2 = 2*(1-pnorm(abs(MKT), 0, 1))
 
         skew_table <- rbind(skew_table, round(c(A, b1p, MST, df, P1),3))
 
