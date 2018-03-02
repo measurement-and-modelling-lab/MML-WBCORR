@@ -172,10 +172,12 @@ for (kk in 1:rows) {
 
 # Replace correlations being assessed against the same fixed value with the mean of those correlations
 if (nrow(hypothesis[hypothesis[,4] == 0,,drop=FALSE]) > 1 && estimationmethod %in% c('TSGLS','TSADF')) {
-	fixed_values <- hypothesis[hypothesis[,4] ==0, ]
-	fixed_values <- unique(hypothesis[,5])
+	fixed_values <- hypothesis[hypothesis[,4]==0, ,drop=FALSE]
+	fixed_values <- unique(fixed_values[,5])
     for (f in fixed_values) {
-        sub_hypothesis <- hypothesis[(hypothesis[,5]==f),]
+        sub_hypothesis <- hypothesis[hypothesis[,4]==0,]
+
+        sub_hypothesis <- sub_hypothesis[sub_hypothesis[,5]==f,]
         if (is.matrix(sub_hypothesis)) {
             sum <- 0
             for (r in 1:nrow(sub_hypothesis)) {
