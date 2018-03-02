@@ -171,8 +171,9 @@ for (kk in 1:rows) {
 
 
 # Replace correlations being assessed against the same fixed value with the mean of those correlations
-if (nrow(hypothesis) > 1 && length(hypothesis[hypothesis[,4] == 0,]) > 1 && estimationmethod %in% c('TSGLS','TSADF')) {
-    fixed_values <- unique(hypothesis[(hypothesis[,4]==0),][,5])
+if (nrow(hypothesis[hypothesis[,4] == 0,,drop=FALSE]) > 1 && estimationmethod %in% c('TSGLS','TSADF')) {
+	fixed_values <- hypothesis[hypothesis[,4] ==0, ]
+	fixed_values <- unique(hypothesis[,5])
     for (f in fixed_values) {
         sub_hypothesis <- hypothesis[(hypothesis[,5]==f),]
         if (is.matrix(sub_hypothesis)) {
@@ -232,7 +233,7 @@ if (nodelta == TRUE) {
     covgamma <- solve(Psi%*%delta)
     gammahatGLS <- covgamma%*%Psi%*%rstar
     e <- rstar-delta%*%gammahatGLS
-    pars <- nrow(gammahatGLS)
+    pars <- max(hypothesis[,4])
     df <- rows-pars
 	
 	
@@ -302,6 +303,7 @@ printfunction <- function () {
     if (pars > 0) {
         gammahatDisplay <- matrix(0, nrow=pars, ncol=3)
         parlist <- unique(hypothesis[, 4])
+        parlist <- parlist[parlist > 0]
         for (i in 1:pars) {
             gammahatDisplay[[i,1]] <- round(parlist[[i]],3)
             gammahatDisplay[[i,2]] <- round(gammahatGLS[[i,1]],3)
