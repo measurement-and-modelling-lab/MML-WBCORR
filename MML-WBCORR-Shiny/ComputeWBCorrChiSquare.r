@@ -169,35 +169,6 @@ for (kk in 1:rows) {
     RWLSList[[a]][[j,i]] <- WLSVec[[kk,1]]
 }
 
-
-# Replace correlations being assessed against the same fixed value with the mean of those correlations
-if (0 %in% hypothesis[,4] && estimationmethod %in% c('TSGLS','TSADF')) {
-	fixed_values <- hypothesis[hypothesis[,4]==0, ,drop=FALSE]
-	fixed_values <- unique(fixed_values[,5])
-    for (f in fixed_values) {
-        sub_hypothesis <- hypothesis[hypothesis[,4]==0,,drop=FALSE]
-
-        sub_hypothesis <- sub_hypothesis[sub_hypothesis[,5]==f,,drop=FALSE]
-        if (is.matrix(sub_hypothesis)) {
-            sum <- 0
-            for (r in 1:nrow(sub_hypothesis)) {
-                    group <- sub_hypothesis[r,][1]
-                    row <- sub_hypothesis[r,][2]
-                    column <- sub_hypothesis[r,][3]
-                    sum <- sum + RList[[group]][[row,column]]
-            }
-            mean <- sum/nrow(sub_hypothesis)
-            for (r in 1:nrow(sub_hypothesis)) {
-                    group <- sub_hypothesis[r,][1]
-                    row <- sub_hypothesis[r,][2]
-                    column <- sub_hypothesis[r,][3]
-                    RWLSList[[group]][[row,column]] <- mean
-                    RWLSList[[group]][[column,row]] <- mean
-            }
-        }
-    }
-}
-
 Psi <- matrix(0, nrow=rows, ncol=rows)
 
 # For each row of the hypothesis matrix, loop through each preceding row + itself; estimate the covariance of each pair using the requested method
