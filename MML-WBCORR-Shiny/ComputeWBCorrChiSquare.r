@@ -51,7 +51,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
     ## Renumber parameter tags if a number is skipped
     parameter.tags <- hypothesis[hypothesis[,4] != 0, 4]
-    if (max(parameter.tags) > length(parameter.tags)) {
+    if (max(parameter.tags) > length(unique(parameter.tags))) {
         hypothesis[hypothesis[,4] != 0, 4] <- as.numeric(as.factor(parameter.tags))
     }
 
