@@ -1,0 +1,609 @@
+<br>
+  <p>
+    This page will interpret the output for an example data set. The first table in the output is the hypothesis matrix:
+  </p>
+
+  <br>
+<table border="1" bordercolor="808080" style="margin-left:15px">
+  <tr>
+    <th align="center">Group
+    </th>
+    <th align="center">Row
+    </th>
+    <th align="center">Column
+    </th>
+    <th align="center">Parameter Tag
+    </th>
+    <th align="center">Fixed Value
+    </th>
+  </tr>
+  <tr>
+    <td align="right">1&nbsp;&nbsp;
+    </td>
+    <td align="right">3&nbsp;&nbsp;
+    </td>
+    <td align="right">2&nbsp;&nbsp;
+    </td>
+    <td align="right">1&nbsp;&nbsp;
+    </td>
+    <td align="right">0&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td align="right">1&nbsp;&nbsp;
+    </td>
+    <td align="right">2&nbsp;&nbsp;
+    </td>
+    <td align="right">1&nbsp;&nbsp;
+    </td>
+    <td align="right">2&nbsp;&nbsp;
+    </td>
+    <td align="right">0&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td align="right">1&nbsp;&nbsp;
+    </td>
+    <td align="right">3&nbsp;&nbsp;
+    </td>
+    <td align="right">1&nbsp;&nbsp;
+    </td>
+    <td align="right">2&nbsp;&nbsp;
+    </td>
+    <td align="right">0&nbsp;&nbsp;
+    </td>
+  </tr>
+</table>
+  <br>
+
+  <p>
+    The hypothesis asserts that &rho;<sub>21</sub> = &rho;<sub>31</sub>. Since &rho;<sub>32</sub> is not equated to anything, it will get a null-consistent estimate but it will not affect the p value for the test.
+  </p>
+
+  <p>
+    Next we see the correlation matrix for each group. In this case there is only one group, so there is only one correlation matrix:
+  </p>
+
+  <br>
+<table border="1" bordercolor="808080" style="margin-left:15px">
+  <tr>
+    <td class="noheader" align="center">
+    </td>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>1
+	</sub>
+	<b>
+    </td>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>2
+	</sub>
+	<b>
+    </td>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>3
+	</sub>
+	<b>
+    </td>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>4
+	</sub>
+	<b>
+    </td>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>5
+	</sub>
+	<b>
+    </td>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>6
+	</sub>
+	<b>
+    </td>
+  </tr>
+  <tr>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>1
+	</sub>
+	<b>
+    </td>
+    <td class="noheader" align="center">1
+    </td>
+    <td class="noheader" align="center">0.109
+    </td>
+    <td class="noheader" align="center">0.021
+    </td>
+    <td class="noheader" align="center">-0.072
+    </td>
+    <td class="noheader" align="center">0.146
+    </td>
+    <td class="noheader" align="center">-0.098
+    </td>
+  </tr>
+  <tr>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>2
+	</sub>
+	<b>
+    </td>
+    <td class="noheader" align="center">0.109
+    </td>
+    <td class="noheader" align="center">1
+    </td>
+    <td class="noheader" align="center">0.077
+    </td>
+    <td class="noheader" align="center">-0.067
+    </td>
+    <td class="noheader" align="center">0.107
+    </td>
+    <td class="noheader" align="center">-0.239
+    </td>
+  </tr>
+  <tr>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>3
+	</sub>
+	<b>
+    </td>
+    <td class="noheader" align="center">0.021
+    </td>
+    <td class="noheader" align="center">0.077
+    </td>
+    <td class="noheader" align="center">1
+    </td>
+    <td class="noheader" align="center">0.129
+    </td>
+    <td class="noheader" align="center">0.150
+    </td>
+    <td class="noheader" align="center">-0.069
+    </td>
+  </tr>
+  <tr>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>4
+	</sub>
+	<b>
+    </td>
+    <td class="noheader" align="center">-0.072
+    </td>
+    <td class="noheader" align="center">-0.067
+    </td>
+    <td class="noheader" align="center">0.129
+    </td>
+    <td class="noheader" align="center">1
+    </td>
+    <td class="noheader" align="center">-0.152
+    </td>
+    <td class="noheader" align="center">-0.193
+    </td>
+  </tr>
+  <tr>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>5
+	</sub>
+	<b>
+    </td>
+    <td class="noheader" align="center">0.146
+    </td>
+    <td class="noheader" align="center">0.107
+    </td>
+    <td class="noheader" align="center">0.150
+    </td>
+    <td class="noheader" align="center">-0.152
+    </td>
+    <td class="noheader" align="center">1
+    </td>
+    <td class="noheader" align="center">-0.323
+    </td>
+  </tr>
+  <tr>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>6
+	</sub>
+	<b>
+    </td>
+    <td class="noheader" align="center">-0.098
+    </td>
+    <td class="noheader" align="center">-0.239
+    </td>
+    <td class="noheader" align="center">-0.069
+    </td>
+    <td class="noheader" align="center">-0.193
+    </td>
+    <td class="noheader" align="center">-0.323
+    </td>
+    <td class="noheader" align="center">1
+    </td>
+  </tr>
+</table>
+  <br>
+
+  <p>
+    Next there is one null-consistent OLS matrix for each group:
+  </p>
+
+  <br>
+<table border="1" bordercolor="808080" style="margin-left:15px">
+  <tr>
+    <td class="noheader" align="center">
+    </td>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>1
+	</sub>
+      </b>
+    </td>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>2
+	</sub>
+      </b>
+    </td>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>3
+	</sub>
+      </b>
+    </td>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>4
+	</sub>
+      </b>
+    </td>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>5
+	</sub>
+      </b>
+    </td>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>6
+	</sub>
+      </b>
+    </td>
+  </tr>
+  <tr>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>1
+	</sub>
+      </b>
+    </td>
+    <td class="noheader" align="center">1
+    </td>
+    <td class="noheader" align="center">0.065
+    </td>
+    <td class="noheader" align="center">0.065
+    </td>
+    <td class="noheader" align="center">-0.072
+    </td>
+    <td class="noheader" align="center">0.146
+    </td>
+    <td class="noheader" align="center">-0.098
+    </td>
+  </tr>
+  <tr>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>2
+	</sub>
+      </b>
+    </td>
+    <td class="noheader" align="center">0.065
+    </td>
+    <td class="noheader" align="center">1
+    </td>
+    <td class="noheader" align="center">0.077
+    </td>
+    <td class="noheader" align="center">-0.067
+    </td>
+    <td class="noheader" align="center">0.107
+    </td>
+    <td class="noheader" align="center">-0.239
+    </td>
+  </tr>
+  <tr>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>3
+	</sub>
+      </b>
+    </td>
+    <td class="noheader" align="center">0.065
+    </td>
+    <td class="noheader" align="center">0.077
+    </td>
+    <td class="noheader" align="center">1
+    </td>
+    <td class="noheader" align="center">0.129
+    </td>
+    <td class="noheader" align="center">0.150
+    </td>
+    <td class="noheader" align="center">-0.069
+    </td>
+  </tr>
+  <tr>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>4
+	</sub>
+      </b>
+    </td>
+    <td class="noheader" align="center">-0.072
+    </td>
+    <td class="noheader" align="center">-0.067
+    </td>
+    <td class="noheader" align="center">0.129
+    </td>
+    <td class="noheader" align="center">1
+    </td>
+    <td class="noheader" align="center">-0.152
+    </td>
+    <td class="noheader" align="center">-0.193
+    </td>
+  </tr>
+  <tr>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>5
+	</sub>
+      </b>
+    </td>
+    <td class="noheader" align="center">0.146
+    </td>
+    <td class="noheader" align="center">0.107
+    </td>
+    <td class="noheader" align="center">0.150
+    </td>
+    <td class="noheader" align="center">-0.152
+    </td>
+    <td class="noheader" align="center">1
+    </td>
+    <td class="noheader" align="center">-0.323
+    </td>
+  </tr>
+  <tr>
+    <td class="noheader" align="center">
+      <b>X
+	<sub>6
+	</sub>
+      </b>
+    </td>
+    <td class="noheader" align="center">-0.098
+    </td>
+    <td class="noheader" align="center">-0.239
+    </td>
+    <td class="noheader" align="center">-0.069
+    </td>
+    <td class="noheader" align="center">-0.193
+    </td>
+    <td class="noheader" align="center">-0.323
+    </td>
+    <td class="noheader" align="center">1
+    </td>
+  </tr>
+</table>
+  <br>
+
+  <p>
+    In this case, since &rho;<sub>21</sub> = 0.109 and &rho;<sub>31</sub> = 0.021 are equal under the null, the OLS estimate of &rho;<sub>21</sub> = &rho;<sub>31</sub> is (0.109 + 0.021)/2 = 0.065. The OLS estimate of &rho;<sub>32</sub> is the sample value, since it wasn't equated to anything under the hypothesis.
+  </p>
+
+  <p>
+    Next we have either the GLS, TSGLS, ADF, or TSADF estimates, depending on which method was selected. Here are the TSGLS estimates:
+  </p>
+
+  <br>
+<table border="1" bordercolor="808080" style="margin-left:15px">
+  <tr>
+    <th align="center">Parameter Tag
+    </th>
+    <th align="center">Estimate
+    </th>
+    <th align="center">Standard Error
+    </th>
+    <th align="center">97.5% Confidence Interval
+    </th>
+  </tr>
+  <tr>
+    <td align="right">1&nbsp;&nbsp;
+    </td>
+    <td align="right">0.077&nbsp;&nbsp;
+    </td>
+    <td align="right">0.203&nbsp;&nbsp;
+    </td>
+    <td align="right">[-0.381, 0.504]&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td align="right">2&nbsp;&nbsp;
+    </td>
+    <td align="right">0.065&nbsp;&nbsp;
+    </td>
+    <td align="right">0.149&nbsp;&nbsp;
+    </td>
+    <td align="right">[-0.391, 0.495]&nbsp;&nbsp;
+    </td>
+  </tr>
+</table>
+  <br>
+
+  <p>
+    If &rho;<sub>21</sub> = &rho;<sub>31</sub> then the TSGLS estimate of &rho;<sub>21</sub> = &rho;<sub>31</sub> is 0.065 and that for &rho;<sub>32</sub> is 0.077. This table also gives confidence intervals on those point estimates, using a strict Bonferroni on an alpha of .05.
+  </p>
+
+  <p>
+    Next we have the "Significance Test Results":
+  </p>
+
+  <br>
+<table border="1" bordercolor="808080" style="margin-left:15px">
+  <tr>
+    <th align="center">Chi Square
+    </th>
+    <th align="center">&nbsp;df&nbsp;
+    </th>
+    <th align="center">plevel
+    </th>
+  </tr>
+  <tr>
+    <td align="right">0.101&nbsp;&nbsp;
+    </td>
+    <td align="right">1&nbsp;&nbsp;
+    </td>
+    <td align="right">0.75&nbsp;&nbsp;
+    </td>
+  </tr>
+</table>
+  <br>
+
+  <p>
+    This indicates that the probability of drawing this sample if the null is true is 75%.
+  </p>
+
+  <p>
+    Next, since we used raw data, we have the "Assessment of Multivariate Normality". The specific test will depend on 1) whether there is missing data and 2) which deletion method was chosen. Yuan, Lambert &amp; Fouladi's (2004) is given if pairwise deletion is employed, and Mardia's (1970) is provided otherwise. Yuan, Lambert &amp; Fouladi's (2004) test is only useable if the observed marginals do not sit in a restricted range, so a test of that assumption is provided for each variable with missing data. This is only possible if there is at least one variable without missing data.
+  </p>
+
+  <p>
+    Since the example data is complete, Mardia's (1970) test is used. Here is the test of multivariate skewness:
+  </p>
+
+  <br>
+<table border="1" bordercolor="808080" style="margin-left:15px">
+  <tr>
+    <th align="center">Group
+    </th>
+    <th align="center">Multivariate Skewness
+    </th>
+    <th align="center">Chi Square
+    </th>
+    <th align="center">df
+    </th>
+    <th align="center">&nbsp;&nbsp;&nbsp;&nbsp;plevel
+    </th>
+  </tr>
+  <tr>
+    <td align="right">1&nbsp;&nbsp;
+    </td>
+    <td align="right">27.801&nbsp;&nbsp;
+    </td>
+    <td align="right">115.838&nbsp;&nbsp;
+    </td>
+    <td align="right">56&nbsp;&nbsp;
+    </td>
+    <td align="right">
+      < 0.001&nbsp;&nbsp;
+	</td>
+  </tr>
+</table>
+
+  <br>
+
+  <p>
+    And here is the test of multivariate kurtosis:
+  </p>
+
+  <br>
+    <table border="1" bordercolor="808080" style="margin-left:15px">
+    <tr>
+	<th align="center">Group
+	</th>
+	<th align="center">Multivariate Kurtosis
+	</th>
+	<th align="center">Z statistic
+	</th>
+	<th align="center">plevel (2-tailed)
+	</th>
+    </tr>
+    <tr>
+	<td align="right">1&nbsp;&nbsp;
+	</td>
+	<td align="right">55.493&nbsp;&nbsp;
+	</td>
+	<td align="right">2.854&nbsp;&nbsp;
+	</td>
+	<td align="right">0.004&nbsp;&nbsp;
+	</td>
+    </tr>
+    </table>
+  <br>
+
+  <p>
+    Since the p value is low for both, multivariate normality is not supported and we should rerun the test using the TSADF method.
+  </p>
+
+  <p>
+    Suppose we remove one value from the data set and choose pairwise deletion. Now Yuan, Lambert, and Fouladi's (2004) test is displayed. This begins with an assessment of the distribution of the observed marginals:
+  </p>
+
+  <br>
+   <table border="1" bordercolor="808080" style="margin-left:15px">
+    <tr>
+	<th align="center">Group
+	</th>
+	<th align="center">Variable
+	</th>
+	<th align="center">Missing Values
+	</th>
+	<th align="center">&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp;ZR
+	</th>
+	<th align="center">plevel (two-tail)
+	</th>
+    </tr>
+    <tr>
+	<td align="right">1&nbsp;&nbsp;
+	</td>
+	<td align="right">1&nbsp;&nbsp;
+	</td>
+	<td align="right">1&nbsp;&nbsp;
+	</td>
+	<td align="right">0.416&nbsp;&nbsp;
+	</td>
+	<td align="right">0.677&nbsp;&nbsp;
+	</td>
+    </tr>
+    </table>
+  <br>
+
+  <p>
+    The p value is high, so the observed marginals do not appear to be restricted and we can move on to the assessment of multivariate normality:
+  </p>
+
+  <br>
+   <table border="1" bordercolor="808080" style="margin-left:15px">
+    <tr>
+	<th align="center">Group
+	</th>
+	<th align="center">&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp;M2
+	</th>
+	<th align="center">plevel (two-tail)
+	</th>
+    </tr>
+    <tr>
+	<td align="right">1&nbsp;&nbsp;
+	</td>
+	<td align="right">2.475&nbsp;&nbsp;
+	</td>
+	<td align="right">0.013&nbsp;&nbsp;
+	</td>
+    </tr>
+    </table>
+  <br>
+
+  <p>
+    Again, the p value is low, so multivariate normality is not supported and we should re-run the test using TSADF.
+  </p>

@@ -1,0 +1,63 @@
+<br>
+<p>
+  Input consists of a hypothesis matrix and one or more raw or correlation data files. Input files should be in headerless, comma-separated (.csv) format. An app for creating properly-formatted files is provided here.
+</p>
+
+<p>
+  Here are six lines from a possible raw data file:
+</p>
+
+<pre class="example" style="margin-left:40px">
+  1.24,2.61,0.260,1.05,7.55,0.2
+  0.280,2.36,1.19,1.66,0.470,0.460
+  0.370,0.820,3.23,0.120,4.57,1.84
+  0.110,5.73,3.04,1.04,0.380,0.350
+  0.750,2.66,2.62,0.290,4.12,0.380
+</pre>
+
+<p>
+  Each row is a participant or observation, and each column is a variable. Note the absence of an ID column, which would be interpreted as a variable. Here is a sample correlation data file:
+</p>
+
+<pre class="example" style="margin-left:40px">
+  1.0,,
+  0.2,1.0,
+  0.3,0.4,1.0
+</pre>
+
+<p>
+  Data from the upper half of the correlation matrix is optional, but the commas which would have separated the absent data are not. In SPSS, you can produce a plain correlation matrix such as this using the following syntax:
+</p>
+
+<pre class="example" style="margin-left:40px">
+  FACTOR
+  /VARIABLES v1 v2 v3
+  /MISSING LISTWISE
+  /ANALYSIS v1 v2 v3
+  /PRINT CORRELATION
+  /ROTATION NOROTATE
+  /METHOD=CORRELATION
+</pre>
+
+<p>
+  Here is a sample hypothesis file:
+</p>
+
+<pre class="example" style="margin-left:40px">
+  1,2,1,1,0
+  1,3,1,1,0
+  1,3,2,0,0.2
+  1,4,1,2,0
+</pre>
+
+<p>
+  Each row of the hypothesis matrix is of the form: group, row, column, parameter tag, fixed value. The first three columns specify a correlation, and the fourth and fifth make an assertion about the value of that correlation. Correlations with the same positive non-zero integer in the parameter tag column are hypothesised to be equal, and correlations with a parameter tag of 0 are hypothesised to be equal to the value of their fixed value column. Correlations with different parameter tags are not hypothesised to be unequal. If a parameter tag is assigned to a single correlation then the output will include an estimate of that correlation, but the p value for the test will be the same as if it hadn't been included.
+</p>
+
+<p>
+  Take the first row of the sample hypothesis matrix. The first three columns specify the correlation in correlation matrix 1 at row 2 of column 1 (&rho;<sub>21</sub> or &rho;<sub>1<sub>21</sub></sub>). Put differently, they pick out the correlation in group 1 between variable 2 and variable 1. This correlation has a parameter tag of 1, so it is hypothesised to be equal to the correlation picked out by the second row, which also has a parameter tag of 1. On the other hand, since its parameter tag is 0, the correlation in the third row is hypothesised to be equal to 0.2. Finally, the correlation in the fourth row is the only correlation with a parameter tag of 2, so it does not figure into the hypothesis at all. Effectively, the hypothesis says: (&rho;<sub>21</sub> = &rho;<sub>31</sub>) &amp; (&rho;<sub>32</sub> = 0.2).
+</p>
+
+<p>
+  The parameter tag column has a "hole" in it if the value of the greatest parameter tag is not equal to the number of unique non-zero parameter tags. For example, if the parameter tag column were [1, 1, 2, 2, 4, 4], then it would have a hole because 3 is skipped. If the column has a hole then it is renumbered. This does not affect the result of the test, and the amended hypothesis matrix is included in the output.
+</p>
