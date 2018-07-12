@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 750px) {
     .body { width:89%; padding-left:5%; padding-bottom: 10px; }
     .title { padding-left:5%; }
     .link { padding-left:5%; }
@@ -10,34 +10,8 @@
     .bodytitle { padding-left:5%; padding-top:20px; }
     .bar2 { padding-top:38px; padding-bottom:38px; }
 }
-@media only screen and (min-width: 500px) and (max-width: 750px) {
-    .body { width:76%; padding-left:12%; padding-right:12%; padding-bottom: 30px; }
-    .title { padding-left:10%; }
-    .bodytitle { padding-left:12%; padding-top:40px; }
-    .link { position: absolute; right: 12%; }
-    .bottom { position: absolute; right: 12%; }
-    .rwd-break { display: none; }
-    .bar2 { padding-top:28px; padding-bottom:28px; }
-}
-@media only screen and (min-width: 750px) and (max-width: 1000px) {
-    .body { width:76%; padding-left:12%; padding-right:12%; padding-bottom: 50px; }
-    .title { padding-left:10%; }
-    .bodytitle { padding-left:12%; padding-top:60px; }
-    .link { position: absolute; right: 12%; }
-    .bottom { position: absolute; right: 12%; }
-    .rwd-break { display: none; }
-    .bar2 { padding-top:28px; padding-bottom:28px; }
-}
-@media only screen and (min-width: 1000px) and (max-width: 1500px) {
-    .body { width:66%; padding-left:17%; padding-right:17%; padding-bottom: 50px; }
-    .title { padding-left:15% }
-    .bodytitle { padding-left:17%; padding-top:60px; }
-    .link { position: absolute; right: 17%; }
-    .bottom { position: absolute; right: 17%; }
-    .rwd-break { display: none; }
-    .bar2 { padding-top:28px; padding-bottom:28px; }
-}
-@media only screen and (min-width: 1500px) {
+
+@media only screen and (min-width: 750px) {
     .body { width:55%; padding-left:23%; padding-right:22%; padding-bottom: 50px; }
     .title { padding-left:2.5% }
     .bodytitle { padding-left:23%; padding-top:60px; }

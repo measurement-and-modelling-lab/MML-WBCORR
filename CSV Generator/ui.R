@@ -12,9 +12,9 @@ shinyUI(fluidPage(theme = "simplex.css",
                         <div class="bar">
                           <b class="title">Measurement and Modelling Lab &nbsp; - &nbsp; Tools</b><br class="rwd-break">
                           <b class="link">
-                            <a href="https://shiny.rcg.sfu.ca/u/pserafin/rsquared/"><font color="#00ca8a">R SQUARED</font></a>
+                            <a href="https://shiny.rcg.sfu.ca/u/pserafin/rsquared/"><font color="white">R SQUARED</font></a>
                             &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/wbcorr/"><font color="white">WBCORR</font></a>
-                            &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/csvgenerator/"><font color="white">CSVGenerator</font></a>
+                            &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/csvgenerator/"><font color="#00ca8a">CSVGenerator</font></a>
                           </b>
                         </div>
                         <br>'
@@ -32,7 +32,7 @@ shinyUI(fluidPage(theme = "simplex.css",
                            ))
        ),
 
-  headerPanel('MML CSV Generator', windowTitle = 'MML - CSV Generator'),
+  headerPanel('', windowTitle = 'CSV Generator'),
   
   sidebarLayout(
       sidebarPanel(
@@ -64,6 +64,9 @@ shinyUI(fluidPage(theme = "simplex.css",
         ),
         conditionalPanel(condition = "input.file == 'hypothesis'", 
           rHandsontableOutput("corrtable2")
+        ),
+        conditionalPanel(condition = "input.file == 'hypothesis'", 
+          HTML("<br>")
         ),
         conditionalPanel(condition = "input.file == 'hypothesis'", 
                          rHandsontableOutput("hypothesistable")

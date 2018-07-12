@@ -1,4 +1,5 @@
-library(shinythemes)
+require(shiny) || install.packages(shiny)
+require(shinythemes) || install.packages(shinythemes)
 
 shinyUI(fluidPage(theme = "simplex.css",
                   
