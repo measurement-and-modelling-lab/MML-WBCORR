@@ -39,10 +39,10 @@
 }
 @media only screen and (min-width: 1500px) {
     .body { width:55%; padding-left:23%; padding-right:22%; padding-bottom: 50px; }
-    .title { padding-left:21% }
+    .title { padding-left:2.5% }
     .bodytitle { padding-left:23%; padding-top:60px; }
-    .link { position: absolute; right: 22%; }
-    .bottom { position: absolute; right: 22%; }
+    .link { position: absolute; right: 3.5%; }
+    .bottom { position: absolute; right: 3.5%; }
     .rwd-break { display: none; }
     .bar2 { padding-top:28px; padding-bottom:28px; }
 }
@@ -80,7 +80,6 @@
 .bar2 {
     background-color: #333;
     overflow: hidden;
-
 }
 
 

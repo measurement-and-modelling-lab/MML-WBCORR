@@ -1,8 +1,35 @@
 library(shinythemes)
 
 shinyUI(fluidPage(theme = "simplex.css",
+                  
+    HTML('<br>
+  
+    <link rel="stylesheet" type="text/css" href="index.css">
+  <style>
+    html {
+       overflow-y: scroll;
+       }
+       </style>
+    <title>Analytics^2 - About</title>
+         <div class="bar">
+    <b class="title">Measurement and Modelling Lab &nbsp; - &nbsp; Tools</b><br class="rwd-break"><b class="link">
+    <a href="https://shiny.rcg.sfu.ca/u/pserafin/rsquared/"><font color="white">R SQUARED</font></a>
+    &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/wbcorr/"><font color="#00ca8a">WBCORR</font></a>
+    &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/csvgenerator/"><font color="white">CSVGenerator</font></a>
+
+
+
+
+
+        </b>
+        </div>
+         
+         
+         
+         '),
 
     HTML("<br>"),
+    
     
     tags$head(
       tags$style(HTML("
@@ -48,7 +75,7 @@ shinyUI(fluidPage(theme = "simplex.css",
                       "))
     ),
 
-    headerPanel('MML-WBCORR', windowTitle = 'MML-WBCORR'),
+    headerPanel('', windowTitle = 'MML-WBCORR'),
 
     sidebarLayout(
     sidebarPanel(

@@ -3,9 +3,34 @@ library(shinythemes)
 library(rhandsontable)
 
 shinyUI(fluidPage(theme = "simplex.css",
-  headerPanel('MML CSV Generator', windowTitle = 'MML - CSV Generator'),
 
-  HTML("<br><br>"),
+  HTML('<br>
+  
+    <link rel="stylesheet" type="text/css" href="index.css">
+  <style>
+    html {
+       overflow-y: scroll;
+       }
+       </style>
+    <title>Analytics^2 - About</title>
+         <div class="bar">
+    <b class="title">Measurement and Modelling Lab &nbsp; - &nbsp; Tools</b><br class="rwd-break"><b class="link">
+    <a href="https://shiny.rcg.sfu.ca/u/pserafin/rsquared/"><font color="#00ca8a">R SQUARED</font></a>
+    &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/wbcorr/"><font color="white">WBCORR</font></a>
+    &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/csvgenerator/"><font color="white">CSVGenerator</font></a>
+
+
+
+
+
+        </b>
+        </div>
+         
+         
+         
+         '),
+  
+  HTML("<br>"),
   
   tags$head(
     tags$style(HTML("
@@ -19,7 +44,8 @@ shinyUI(fluidPage(theme = "simplex.css",
                       sub { vertical-align: 25%; font-size: 70%; }
                     "))
     ),
-
+  headerPanel('MML CSV Generator', windowTitle = 'MML - CSV Generator'),
+  
     sidebarLayout(
     sidebarPanel(
       sliderInput("groups", "Number of groups:",
