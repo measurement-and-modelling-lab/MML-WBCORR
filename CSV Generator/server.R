@@ -93,7 +93,7 @@ shinyServer(function(input, output, session) {
                } else if (value == 8) {
                td.style.background = '#2abe98';
                }
-               }",format='0.0[00]')
+               }",format='0.[000]')
     })
   
   
