@@ -14,9 +14,9 @@ shinyUI(fluidPage(theme = "simplex.css",
     <title>Analytics^2 - About</title>
          <div class="bar">
     <b class="title">Measurement and Modelling Lab &nbsp; - &nbsp; Tools</b><br class="rwd-break"><b class="link">
-    <a href="https://shiny.rcg.sfu.ca/u/pserafin/rsquared/"><font color="white">R SQUARED</font></a>
-    &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/wbcorr/"><font color="#00ca8a">WBCORR</font></a>
-    &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/csvgenerator/"><font color="white">CSVGenerator</font></a>
+    <a href="https://shiny.rcg.sfu.ca/u/pserafin/rsquared/"><font color="white">MML-R2</font></a>
+    &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/wbcorr/"><font color="#00ca8a">MML-WBCORR</font></a>
+    &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/csvgenerator/"><font color="white">CSV Generator</font></a>
 
 
 
@@ -40,7 +40,8 @@ shinyUI(fluidPage(theme = "simplex.css",
                       font-weight: bold;
                       line-height: 1.1;
                       color: #333;
-                      }
+                    }
+                    body { min-width: 450px; }
                     sub { vertical-align: 25%; font-size: 70%; }
                     th {
                       white-space: nowrap;
