@@ -54,6 +54,7 @@ shinyUI(fluidPage(theme = "simplex.css",
             conditionalPanel(condition = "input.file == 'hypothesis'",
                              helpText("Note: Cells containing the same positive integer are hypothesised to be equal,
                                        and cells containing a value between -1 and 1 are hypothesised to be equal to that value.
+                                       The lower diagonal is group 1 and the upper diagonal is group 2.
                                        Right click on the hypothesis matrix to download it as a .csv file.")
             )
         ),
