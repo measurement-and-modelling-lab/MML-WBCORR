@@ -1,62 +1,40 @@
 shinyServer(function(input, output, session) {
 
   output$corrtable1 <- renderRHandsontable({
-    
-    variables <- as.numeric(input$variables)
-    
-    MAT <- matrix('', nrow=variables, ncol=variables)
-    
-    rownames(MAT) <- paste("X<sub>", 1:variables, "</sub>", sep="")
-    colnames(MAT) <- paste("X<sub>", 1:variables, "</sub>", sep="")
-    
-    for (v in 1:variables) {
-      MAT[v,v] <- 1
-    }
 
-    ## Only runs the first time, so useless
-    ## for (r in 1:variables) {
-    ##     for (c in 1:variables) {
-    ##         if ((c > r) & !(MAT[r,c] == MAT[c,r])) {
-    ##             MAT[r,c] <- MAT[c,r]
-    ##         }
-    ##     }
-    ## }
+      variables <- as.numeric(input$variables)
     
-    rhandsontable(MAT, overflow = 'visible', width = (variables+1)*50) %>%
-      
-      hot_context_menu(allowRowEdit = FALSE,
-                       allowColEdit = FALSE,
-                       customOpts = list(
-                         csv = list(name = "Download to CSV",
-                                    callback = htmlwidgets::JS(
-                                      "function (key, options) {
-                                      var csv = csvString(this);
-                                      while (csv[0] == 'X') {
-                                      csv = csv.substring(csv.indexOf('X')+14);
-                                      }
-                                      
-                                      var link = document.createElement('a');
-                                      link.setAttribute('href', 'data:text/plain;charset=utf-8,' +
-                                      encodeURIComponent(csv));
-                                      link.setAttribute('download', 'data.csv');
-                                      
-                                      document.body.appendChild(link);
-                                      link.click();
-                                      document.body.removeChild(link);
-  }")))) %>%
-    hot_cols(renderer = "
-             function (instance, td, row, col, prop, value, cellProperties) {
-             Handsontable.renderers.NumericRenderer.apply(this, arguments);
-             if (row == col) {
-             td.style.background = 'lightgrey';
-             cellProperties.readOnly = true;
-             } else if (col > row) {
-             td.style.background = 'lightgrey';
-             cellProperties.readOnly = true;
-             }
-             }",format='0.0[00]')
+      MAT <- matrix('', nrow=variables, ncol=variables)
 
-})
+      rownames(MAT) <- paste("X<sub>", 1:variables, "</sub>", sep="")
+      colnames(MAT) <- paste("X<sub>", 1:variables, "</sub>", sep="")
+
+      for (v in 1:variables) {
+          MAT[v,v] <- 1
+      }
+
+      rhandsontable(MAT) %>%
+          hot_context_menu(
+              customOpts = list(
+                  csv = list(name = "Download to CSV",
+                        callback = htmlwidgets::JS(
+                        "function (key, options) {
+                            var csv = csvString(this, sep=',', dec='.');
+                            while (csv[0] == 'X') {
+                            csv = csv.substring(csv.indexOf('X')+14);
+                            }
+
+
+                            var link = document.createElement('a');
+                            link.setAttribute('href', 'data:text/plain;charset=utf-8,' +
+                            encodeURIComponent(csv));
+                            link.setAttribute('download', 'data.csv');
+
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }"))))
+  })
   
   
   output$corrtable2 <- renderRHandsontable({
@@ -68,7 +46,7 @@ shinyServer(function(input, output, session) {
     rownames(MAT) <- paste("X<sub>", 1:variables, "</sub>", sep="")
     colnames(MAT) <- paste("X<sub>", 1:variables, "</sub>", sep="")
     
-    rhandsontable(MAT, overflow = 'visible', width = (variables+1)*50) %>%
+    rhandsontable(MAT) %>%
       hot_context_menu(allowRowEdit = FALSE, allowColEdit = FALSE) %>%
       hot_cols(renderer = "
                function (instance, td, row, col, prop, value, cellProperties) {
@@ -153,26 +131,28 @@ shinyServer(function(input, output, session) {
     
     ## Delete row names
     rownames(h_matrix) <- NULL
+
+    ## var csv = csv.substring(42,);
     
     ## Make the hypothesis matrix downloadable via context menu
-    MAT = h_matrix
-    rhandsontable(MAT, readOnly = TRUE, width = 325) %>%
-      hot_context_menu(
-        customOpts = list(
-          csv = list(name = "Download to CSV",
-                     callback = htmlwidgets::JS(
-                       "function (key, options) {
-                                    var csv = csvString(this);
+    rhandsontable(h_matrix) %>%
+        hot_context_menu(
+            customOpts = list(
+                csv = list(name = "Download to CSV",
+                        callback = htmlwidgets::JS(
+                        "function (key, options) {
+                            var csv = csvString(this, sep=',', dec='.');
 
-                                    var link = document.createElement('a');
-                                    link.setAttribute('href', 'data:text/plain;charset=utf-8,' +
-                                    encodeURIComponent(csv));
-                                    link.setAttribute('download', 'hypothesis.csv');
+                            var link = document.createElement('a');
+                            link.setAttribute('href', 'data:text/plain;charset=utf-8,' +
+                            encodeURIComponent(csv));
+                            link.setAttribute('download', 'data.csv');
 
-                                    document.body.appendChild(link);
-                                    link.click();
-                                    document.body.removeChild(link);
-                                }"))))
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }"))))
+
   })
   
   
