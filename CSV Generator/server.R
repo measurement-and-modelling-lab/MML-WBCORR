@@ -132,8 +132,6 @@ shinyServer(function(input, output, session) {
     ## Delete row names
     rownames(h_matrix) <- NULL
 
-    ## var csv = csv.substring(42,);
-    
     ## Make the hypothesis matrix downloadable via context menu
     rhandsontable(h_matrix) %>%
         hot_context_menu(
@@ -142,11 +140,12 @@ shinyServer(function(input, output, session) {
                         callback = htmlwidgets::JS(
                         "function (key, options) {
                             var csv = csvString(this, sep=',', dec='.');
+                            var csv = csv.substring(43);
 
                             var link = document.createElement('a');
                             link.setAttribute('href', 'data:text/plain;charset=utf-8,' +
                             encodeURIComponent(csv));
-                            link.setAttribute('download', 'data.csv');
+                            link.setAttribute('download', 'hypothesis.csv');
 
                             document.body.appendChild(link);
                             link.click();
