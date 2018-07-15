@@ -57,20 +57,9 @@ if (file.exists) {
 }
 
 
-## Renumber parameter tags if a number is skipped
-parameter.tags <- hypothesis[hypothesis[,4] != 0, 4]
-if (max(parameter.tags) > length(unique(parameter.tags))) {
-    hypothesis[hypothesis[,4] != 0, 4] <- as.numeric(as.factor(parameter.tags))
-    cat("\nRenumbered the parameter tag column of the hypothesis matrix. New matrix:\n\n")
-    print(hypothesis)
-}
-
-
 ## Generate sample size list
 if (datatype == "rawdata") {
-    NList <- lapply(data, function(group) {
-        nrow(group)
-    })
+    NList <- lapply(data, function(group) nrow(group))
 } else {
     cat("\nInput your sample sizes in the following format: N1;N2\n")
     NList <- readline(prompt="")
@@ -108,7 +97,24 @@ if (datatype == "rawdata") {
 ## Run the test
 output <- ComputeWBCorrChiSquare(data, NList, hypothesis, datatype, estimation.method, deletion)
 
+
 NList <- output[[6]]
+
+
+## Print the original hypothesis matrix
+cat("\nInput Hypothesis Matrix\n\n")
+colnames(hypothesis) <- c("Group", "Row", "Column", "Parameter Tag", "Fixed Value")
+tablegen(hypothesis, TRUE)
+
+
+## Print the amended hypothesis matrix
+hypothesis.amended <- output[[7]]
+if (!all(hypothesis == hypothesis.amended)) {
+    cat("\nAmended Hypothesis Matrix\n\n")
+    colnames(hypothesis.amended) <- c("Group", "Row", "Column", "Parameter Tag", "Fixed Value")
+    tablegen(hypothesis.amended, TRUE)
+}
+
 
 ## Print the correlation matrices
 RList <- output[[1]]

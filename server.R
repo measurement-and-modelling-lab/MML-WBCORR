@@ -91,18 +91,10 @@ shinyServer(function(input, output, session) {
 
         ## Read the hypothesis file
         hypothesis <- as.matrix(read.csv(file=input$hypothesisfile[[4]], head=FALSE, sep=","))
-        hypothesis.original <- hypothesis ## Back up for output
-
-
-        ## Renumber parameter tags if a number is skipped
-        parameter.tags <- hypothesis[hypothesis[,4] != 0, 4]
-        if (max(parameter.tags) > length(unique(parameter.tags))) {
-            hypothesis[hypothesis[,4] != 0, 4] <- as.numeric(as.factor(parameter.tags))
-        }
 
 
         ## Import N (calculate if raw data) for each group
-        NList <- c()
+        NList <- list()
         if (datatype == "correlation") {
             for (i in 1:data.length) {
                 validate(need(eval(parse(text = paste0('input$samplesize',i))), ""))
@@ -113,6 +105,7 @@ shinyServer(function(input, output, session) {
                 NList[[i]] <- nrow(data[[i]])
             }
         }
+        NList <- as.numeric(NList)
 
 
         ## Define deletion method
@@ -137,12 +130,12 @@ shinyServer(function(input, output, session) {
 
         ## Print the original hypothesis matrix
         hypothesis.colnames <- c("Group", "Row", "Column", "Parameter Tag", "Fixed Value")
-        html.output <- paste0(html.output, htmlTable(hypothesis.original, align="c", caption="Input Hypothesis Matrix", header=hypothesis.colnames))
+        html.output <- paste0(html.output, htmlTable(hypothesis, align="c", caption="Input Hypothesis Matrix", header=hypothesis.colnames))
 
 
         ## Print the amended hypothesis matrix, if changes were made
         hypothesis.amended <- output[[7]]
-        if (!all(hypothesis.original == hypothesis.amended)) {
+        if (!all(hypothesis == hypothesis.amended)) {
             html.output <- paste0(html.output, htmlTable(hypothesis.amended, align="c", caption="Amended Hypothesis Matrix", header=hypothesis.colnames))
         }
 
@@ -199,9 +192,6 @@ shinyServer(function(input, output, session) {
                 html.output <- paste0(html.output, htmlTable(MardiaSK[[2]], align="c", caption="Assessment of Multivariate Kurtosis"))
             }
         }
-
-        ## for documentation
-        write(html.output, file = "missingdata.html", sep="")
 
         HTML(html.output)
 

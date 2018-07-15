@@ -1,5 +1,6 @@
 ## Load functions
 ComputeWBCorrChiSquare <- dget("./wbcorr/ComputeWBCorrChiSquare.R")
+tablegen <- dget("./wbcorr/tablegen.R")
 
 
 ## Take one sample from each group, then return the samples as a list
@@ -65,15 +66,6 @@ if (file.exists) {
 }
 
 
-## Renumber parameter tags if a number is skipped
-parameter.tags <- hypothesis[hypothesis[,4] != 0, 4]
-if (max(parameter.tags) > length(unique(parameter.tags))) {
-    hypothesis[hypothesis[,4] != 0, 4] <- as.numeric(as.factor(parameter.tags))
-    cat("\nRenumbered the parameter tag column of the hypothesis matrix. New matrix:\n")
-    print(hypothesis)
-}
-
-
 ## Generate sample size list
 NList <- lapply(data, function(group) {
     nrow(group)
@@ -81,10 +73,13 @@ NList <- lapply(data, function(group) {
 
 
 ## Choose how to deal with missing data
-cat("\nChoose a method for dealing with possible missing data (\"listwise\" or \"pairwise\", or blank if there is no missing data.).\n")
-deletion <- readline(prompt="")
-if (!(deletion %in% c("listwise", "pairwise", ""))) {
+cat("\nChoose a method for dealing with possible missing data: 1. Listwise  2. Pairwise  3. There is no missing data\n")
+deletion.index <- readline(prompt="")
+if (!(deletion.index %in% c("1", "2", "3"))) {
     stop("Invalid deletion method.")
+} else {
+    deletion.index <- as.numeric(deletion.index)
+    deletion <- c("listwise", "pairwise", "nodeletion")[deletion.index]
 }
 
 
@@ -112,7 +107,7 @@ for (i in 1:iterations) {
         covgamma <- gammahatDisplay[,3]
 
         labeled.estimates <- cbind('point estimate', parameter.tags, gammahatGLS)
-        labeled.variances <- cbind('standard error', parameter.tags), covgamma)
+        labeled.variances <- cbind('standard error', parameter.tags, covgamma)
         estimate <- rbind(labeled.estimates, labeled.variances)
 
         output[[j]] <- cbind(i, estimation.method, estimate)
@@ -123,6 +118,16 @@ for (i in 1:iterations) {
     }
 }
 cat("Bootstrap complete!\n")
+
+
+## Renumber parameter tags if a number is skipped
+parameter.tags <- hypothesis[hypothesis[,4] != 0, 4]
+if (max(parameter.tags) > length(unique(parameter.tags))) {
+    hypothesis[hypothesis[,4] != 0, 4] <- as.numeric(as.factor(parameter.tags))
+    cat("\nRenumbered the parameter tag column of the hypothesis matrix. New matrix:\n\n")
+    colnames(hypothesis) <- c("Group", "Row", "Column", "Parameter Tag", "Fixed Value")
+    tablegen(hypothesis, TRUE)
+}
 
 
 ## Write output

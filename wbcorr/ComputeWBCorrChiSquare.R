@@ -19,6 +19,13 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     z <- dget("./wbcorr/fisherz.R")
 
 
+    ## Renumber parameter tags if a number is skipped
+    parameter.tags <- hypothesis[hypothesis[,4] != 0, 4]
+    if (max(parameter.tags) > length(unique(parameter.tags))) {
+        hypothesis[hypothesis[,4] != 0, 4] <- as.numeric(as.factor(parameter.tags))
+    }
+
+
     ## Get the number of samples
     A <- length(data)
 
@@ -108,10 +115,9 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
             nrow(data[[x]])
         })
     }
-    NList <- as.numeric(NList) ## This shouldn't be necessary??
-
 
     ## Create a matrix with the sample sizes for the groups referenced in the rows of the hypothesis matrix along its diagonal
+    NList <- as.numeric(NList) ## Necessary for some reason
     nVector <- NList[hypothesis[,1]] - 1
     nMatrix <- diag(nVector, nrow=length(nVector))
 
