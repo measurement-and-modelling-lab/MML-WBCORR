@@ -1,6 +1,6 @@
 function (data) {
 
-  m2_table <- c('Group','&nbsp;&nbsp;&nbsp;&nbsp;M<sub>2</sub>&nbsp;&nbsp;&nbsp;&nbsp;','plevel (two-tail)')
+    m2_table <- list()
 
     for (jj in 1:length(data)) {
 
@@ -25,9 +25,11 @@ function (data) {
         M2 <- round(M2, 3)
         p_m2 <- round(p_m2, 3)
 
-        new_row <- c(jj, M2, p_m2)
-        m2_table <- rbind(m2_table, new_row)
+        m2_table[[jj]] <- c(jj, M2, p_m2)
     }
+
+    m2_table <- do.call(rbind, m2_table)
+    colnames(m2_table) <- c('Group','M<sub>2</sub>','plevel (two-tail)')
 
     return(m2_table)
 }

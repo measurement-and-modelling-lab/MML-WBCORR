@@ -9,5 +9,5 @@ function(R) {
             RR[j,i] <- R[i,j]
         }
     }
-return(RR)
+    return(RR)
 }

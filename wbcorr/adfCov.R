@@ -1,6 +1,6 @@
 function (a,i,j,b,k,h,R,moments) {
 
-    FRHO <- dget("FRHO.r")
+    FRHO <- dget("./wbcorr/FRHO.R")
 
     if (a != b) {
         Cov <- 0

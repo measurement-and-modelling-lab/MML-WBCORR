@@ -1,9 +1,10 @@
 function(data) {
-  
+    
     A <- length(data)
 
-    skew_table <- c("Group", "Multivariate Skewness", "Chi Square", "df", "plevel")
-    kurt_table <- c("Group", "Multivariate Kurtosis", "Z statistic", "plevel (2-tailed)")
+    skew_table <- list()
+    kurt_table <- list()
+
 
     for (i in 1:A) {
 
@@ -34,20 +35,26 @@ function(data) {
         MKT = (b2p-(p*(p+2)*(n-1)/(n+1)))/(sqrt((8*p*(p+2))/n))
         P2 = 2*(1-pnorm(abs(MKT), 0, 1))
 
-        skew_table <- rbind(skew_table, round(c(A, b1p, MST, df, P1),3))
+        skew_table[[i]] <- round(c(i, b1p, MST, df, P1),3) ## Probably shouldn't round here
 
-        if (skew_table[i+1,5] == 0) {
-                skew_table[i+1,5] <- '< 0.001'
+        if (skew_table[[i]][5] == 0) {
+            skew_table[[i]][5] <- '< 0.001'
         }
 
-        kurt_table <- rbind(kurt_table, round(c(A, b2p, MKT, P2),3))
+        kurt_table[[i]] <- round(c(i, b2p, MKT, P2),3) ## Probably shouldn't round here
 
-        if (kurt_table[i+1,4] == 0) {
-                kurt_table[i+1,4] <- '< 0.001'
+        if (kurt_table[[i]][4] == 0) {
+            kurt_table[[i]][4] <- '< 0.001'
         }
 
 
     }
+
+    skew_table <- do.call(rbind, skew_table)
+    colnames(skew_table) <- c("Group", "Multivariate Skewness", "Chi Square", "df", "plevel")
+
+    kurt_table <- do.call(rbind, kurt_table)
+    colnames(kurt_table) <- c("Group", "Multivariate Kurtosis", "Z statistic", "plevel (2-tailed)")
 
     return(list(skew_table, kurt_table))
 }

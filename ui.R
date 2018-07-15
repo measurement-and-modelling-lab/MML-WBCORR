@@ -1,3 +1,4 @@
+require(htmlTable) || install.packages(htmlTable)
 require(shiny) || install.packages(shiny)
 require(shinythemes) || install.packages(shinythemes)
 
@@ -83,8 +84,8 @@ shinyUI(fluidPage(theme = "simplex.css",
     sidebarPanel(
         radioButtons("datatype", "Data type:", c("Correlation data" = "correlation", "Raw data" = "rawdata")),
         uiOutput("estimationmethodInput"),
-        conditionalPanel(condition = "input.datatype == 'rawdata' && input.estimationmethod != 'TSADF' && input.estimationmethod != 'ADF'", radioButtons("deletion1", label = "Missing values:", choices = c("There are none" = 'no', "Listwise deletion" = 'listwise', "Pairwise deletion" = 'pairwise'))),
-        conditionalPanel(condition = "input.datatype == 'rawdata' && input.estimationmethod != 'TSGLS' && input.estimationmethod != 'GLS'", radioButtons("deletion2", label = "Missing values:", choices = c("There are none" = 'no', "Listwise deletion" = 'listwise'))),
+        conditionalPanel(condition = "input.datatype == 'rawdata' && input.estimationmethod != 'TSADF' && input.estimationmethod != 'ADF'", radioButtons("glsdeletion", label = "Missing values:", choices = c("There are none" = "nodeletion", "Listwise deletion" = 'listwise', "Pairwise deletion" = 'pairwise'))),
+        conditionalPanel(condition = "input.datatype == 'rawdata' && input.estimationmethod != 'TSGLS' && input.estimationmethod != 'GLS'", radioButtons("adfdeletion", label = "Missing values:", choices = c("There are none" = "nodeletion", "Listwise deletion" = 'listwise'))),
         numericInput("samples", "Number of groups:", 1, min = 1, max = 10),
         fileInput("hypothesisfile", "Hypothesis file:"),
         HTML('<hr style="height:1px; visibility:hidden;" />'),
@@ -97,10 +98,10 @@ shinyUI(fluidPage(theme = "simplex.css",
     mainPanel(
       tabsetPanel(
         id = "inTabset",
-        tabPanel(value = "readme1", "Formatting input", includeHTML("input.html")),
-        tabPanel(value = "readme2", "Choosing a method", includeHTML("method.html")),
-        tabPanel(value = "readme3", "Interpreting output", includeHTML("output.html")),
-        tabPanel(value = "out", "Output", htmlOutput("wbsctOutput"))
+        tabPanel(value = "readme1", "Formatting input", includeHTML("./documentation/input.html")),
+        tabPanel(value = "readme2", "Choosing a method", includeHTML("./documentation/method.html")),
+        tabPanel(value = "readme3", "Interpreting output", includeHTML("./documentation/output.html")),
+        tabPanel(value = "out", "Output", uiOutput("finaloutput"))
       )
       )),
     HTML('<br>'),
