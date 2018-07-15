@@ -249,7 +249,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
 
     ## Return output tables
-    output <- list(RList, RWLSList, gammahatDisplay, sigtable, MardiaSK, NList)
+    output <- list(RList, RWLSList, gammahatDisplay, sigtable, MardiaSK, NList, hypothesis)
     return(output)
 
 }

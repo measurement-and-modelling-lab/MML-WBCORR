@@ -91,6 +91,7 @@ shinyServer(function(input, output, session) {
 
         ## Read the hypothesis file
         hypothesis <- as.matrix(read.csv(file=input$hypothesisfile[[4]], head=FALSE, sep=","))
+        hypothesis.original <- hypothesis ## Back up for output
 
 
         ## Renumber parameter tags if a number is skipped
@@ -129,60 +130,80 @@ shinyServer(function(input, output, session) {
         ## Run the test
         output <- ComputeWBCorrChiSquare(data, NList, hypothesis, datatype, estimation.method, deletion)
 
-        final.output <- ""
+
+        html.output <- ""
+        NList <- output[[6]] ## Import amended sample sizes
 
 
-        ## Import amended sample sizes
-        NList <- output[[6]]
+        ## Print the original hypothesis matrix
+        hypothesis.colnames <- c("Group", "Row", "Column", "Parameter Tag", "Fixed Value")
+        html.output <- paste0(html.output, htmlTable(hypothesis.original, align="c", caption="Input Hypothesis Matrix", header=hypothesis.colnames))
 
-        ## Assemble correlation matrices
+
+        ## Print the amended hypothesis matrix, if changes were made
+        hypothesis.amended <- output[[7]]
+        if (!all(hypothesis.original == hypothesis.amended)) {
+            html.output <- paste0(html.output, htmlTable(hypothesis.amended, align="c", caption="Amended Hypothesis Matrix", header=hypothesis.colnames))
+        }
+
+
+        ## Print the correlation matrices
         RList <- output[[1]]
         for (i in 1:data.length) {
             rownames(RList[[i]]) <- colnames(RList[[i]]) <- lapply(1:nrow(RList[[i]]), function(i) "")
             RList[[i]] <- round(RList[[i]], 3)
-            header <- paste0("Input Correlation Matrix #", i, " (N=", NList[[i]], ")")
-            final.output <- paste0(final.output, htmlTable(RList[[i]], align="r", caption=header))
+            variables <- nrow(RList[[i]])
+            labels <- paste0("<b>X<sub>", 1:variables, "</sub></b>")
+            caption <- paste0("Input Correlation Matrix #", i, " (N=", NList[[i]], ")")
+            html.output <- paste0(html.output, htmlTable(RList[[i]], align="r", caption=caption, rnames=labels, header=labels, align.header="r", css.cell = "padding-left: .5em; padding-right: .2em;"))
         }
 
 
-        ## Assemble correlation matrices
+        ## Print the OLS matrices
         RWLSList <- output[[2]]
         for (i in 1:data.length) {
             rownames(RWLSList[[i]]) <- colnames(RWLSList[[i]]) <- lapply(1:nrow(RWLSList[[i]]), function(i) "")
             RWLSList[[i]] <- round(RWLSList[[i]], 3)
-            header <- paste0("OLS Matrix #", i, " (N=", NList[[i]], ")")
-            final.output <- paste0(final.output, htmlTable(RWLSList[[i]], align="r", caption=header))
+            variables <- nrow(RList[[i]])
+            labels <- paste0("<b>X<sub>", 1:variables, "</sub></b>")
+            caption <- paste0("OLS Estimates Matrix #", i, " (N=", NList[[i]], ")")
+            html.output <- paste0(html.output, htmlTable(RWLSList[[i]], align="r", caption=caption, rnames=labels, header=labels, align.header="r", css.cell = "padding-left: .5em; padding-right: .2em;"))
         }
 
 
         ## Print the parameter estimates
         gammahatDisplay <- output[[3]]
+        gammahatDisplay <- gammahatDisplay[order(gammahatDisplay[,1]), , drop=FALSE] ## Order the estimates by parameter tag
         if (!identical(NA, gammahatDisplay)) {
             header <- paste0(estimation.method, " Parameter Estimates")
-            final.output <- paste0(final.output, htmlTable(gammahatDisplay, align="c", caption=header))
+            html.output <- paste0(html.output, htmlTable(gammahatDisplay, align="c", caption=header))
         }
+
 
 
         ## Return significance test results
         sigtable <- output[[4]]
         header <- "Significance Test Results"
-        final.output <- paste0(final.output, htmlTable(sigtable, align="c", caption=header))
+        html.output <- paste0(html.output, htmlTable(sigtable, align="c", caption=header))
 
 
         ## Print MVN test
         if (datatype == "rawdata") {
             MardiaSK <- output[[5]]
             if (deletion == "pairwise") {
-                final.output <- paste0(final.output, htmlTable(MardiaSK[[1]], align="c", caption="Assessment of the Distribution of the Observed Marginals"))
-                final.output <- paste0(final.output, htmlTable(MardiaSK[[2]], align="c", caption="Assessment of Multivariate Normality"))
+                html.output <- paste0(html.output, htmlTable(MardiaSK[[1]], align="c", caption="Assessment of the Distribution of the Observed Marginals"))
+                html.output <- paste0(html.output, htmlTable(MardiaSK[[2]], align="c", caption="Assessment of Multivariate Normality"))
             } else {
                 cat("\nAssessment of Multivariate Normality\n")
-                final.output <- paste0(final.output, htmlTable(MardiaSK[[1]], align="c", caption="Assessment of Multivariate Skewness"))
-                final.output <- paste0(final.output, htmlTable(MardiaSK[[1]], align="c", caption="Assessment of Multivariate Kurtosis"))
+                html.output <- paste0(html.output, htmlTable(MardiaSK[[1]], align="c", caption="Assessment of Multivariate Skewness"))
+                html.output <- paste0(html.output, htmlTable(MardiaSK[[1]], align="c", caption="Assessment of Multivariate Kurtosis"))
             }
         }
 
-        HTML(final.output)
+        ## for documentation
+        write(html.output, file = "nomissingdata.html", sep="")
+
+        HTML(html.output)
 
     })
 

@@ -4,6 +4,7 @@ ComputeWBCorrChiSquare <- dget("./wbcorr/ComputeWBCorrChiSquare.R")
 errorcheck <- dget("./wbcorr/errorcheck.R")
 tablegen <- dget("./wbcorr/tablegen.R")
 
+
 ## Stipulate data type
 cat("\nWhat type of data will you be using? 1. Raw data 2. Correlation data\n")
 datatype <- readline(prompt="")
@@ -18,6 +19,7 @@ if (datatype == 1) {
 } else {
     stop("Invalid data type.")
 }
+
 
 ## Specify input files
 cat("\nInput your files in the following format: data1.csv;data2.csv;hypothesis.csv\n")
