@@ -1,4 +1,3 @@
- - Extend htmlTable() to the output interpretation documentation
  - Put off rounding until output
  - Decide whether empty-upper-triangle correlation matrices should be allowed, if so and implement the correction
  - Check that the pairwise MVN test actually works
