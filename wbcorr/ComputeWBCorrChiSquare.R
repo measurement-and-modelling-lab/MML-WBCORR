@@ -30,6 +30,23 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     A <- length(data)
 
 
+    ## If the upper triangle of a correlation matrix is empty, make the matrix symmetric
+    ## Otherwise, check whether the matrix is symmetric and if so return an error
+    if (datatype == "correlation") {
+        for (i in 1:A) {
+            groupi <- data[[i]]
+            upper.triangle.i <- groupi[upper.tri(groupi)]
+            lower.triangle.i <- groupi[lower.tri(groupi)]
+            if (all(is.na(upper.triangle.i))) {
+                groupi[upper.tri(groupi)] <- lower.triangle.i
+                data[[i]] <- groupi
+            } else if (!all(lower.triangle.i == upper.triangle.i)) {
+                stop("Correlation matrix is not symmetric.")
+            }
+        }
+    }
+    
+
     ## Check for a variety of problems
     errorcheck(data, datatype, hypothesis, deletion)
 
@@ -60,13 +77,13 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
             moments[[jj]] <- compute4thOrderMoments(data, jj)
             RList[[jj]] <- cor(data[[jj]], use="pairwise") ## Since we've already checked for missing data, we can use pairwise in every case
         }
+        if (deletion == "pairwise" & !data.is.missing) {
+            stop("You can't use pairwise deletion without missing data.")
+        }
     } else {
         RList <- data ## If the data is already correlation then do nothing
     }
 
-    if (deletion == "pairwise" & !data.is.missing) {
-        stop("You can't use pairwise deletion without missing data.")
-    }
 
 
     ## Check that the correlation matrices are positive definite

@@ -163,15 +163,3 @@ if (datatype == "rawdata") {
         tablegen(MardiaSK[[2]], TRUE)
     }
 }
-
-
-## ## Make the matrix symmetric if it's square, give error otherwise
-## if (datatype == 'correlation') {
-##     for (i in 1:A) {
-##         if (nrow(data[[i]]) == ncol(data[[i]])) {
-##             data[[i]] <- MakeSymmetricMatrix(data[[i]])
-##         } else {
-##             stop('Data matrix is not square.')
-##         }
-##     }
-## }
