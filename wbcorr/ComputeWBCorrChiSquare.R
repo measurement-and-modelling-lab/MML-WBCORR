@@ -52,7 +52,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
 
     ## Apply listwise deletion, if requested
-    if (deletion == 'listwise' & datatype == "rawdata") {
+    if (deletion == 'listwise') {
         data <- lapply(data, function(x) {
             temp <- suppressWarnings(as.numeric(x)) ## Convert anything that can't be interpreted as a number to NA
             temp <- matrix(temp, nrow=nrow(x), ncol=ncol(x)) ## as.numeric() converts the matrix into a list, unfortunately
@@ -141,7 +141,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
     ## Check if there are any parameter tags; if there are, create delta
     delta <- sapply(1:max(hypothesis[,4]), function(p) as.numeric(p == hypothesis[,4]) )
-    nodelta <- max(delta) == 0
+    no.parameters <- max(delta) == 0
 
 
     ## Create a vector of fixed values
@@ -150,7 +150,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
 
     ## Create WLS (OLS?) estimates
-    if (nodelta == TRUE) {
+    if (no.parameters) {
         WLSVec <- rhostar
     } else {
         gammahatWLS <- ComputeWLS(VecR,delta,rhostar,nMatrix)
@@ -196,47 +196,42 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
     rstar <- VecR - rhostar  ## Subtract the estimated value from the observed value
 
-    if (nodelta == TRUE) {
+    parameters <- unique(hypothesis[, 4])
+    parameters <- parameters[parameters > 0]
+    parameters.length <- length(parameters)
+
+    if (no.parameters) {
         e <- rstar
-        parameters.length <- 0
         df <- hypothesis.rows
     } else {
         Psi <- t(delta)%*%OmegaHatInverse
         covgamma <- solve(Psi%*%delta)
         gammahatGLS <- covgamma%*%Psi%*%rstar
         e <- rstar-delta%*%gammahatGLS
-        parameters.length <- max(hypothesis[,4])
         df <- hypothesis.rows - parameters.length
 	
-	
+
+
 	## Produce confidence intervals on parameter estimates (strict Bonferroni)
-	number_of_parameters <- length(gammahatGLS)
-	corrected_alpha <- 0.05/number_of_parameters
-	critical_value <- qnorm(1-corrected_alpha/2)
-	ptags <- unique(hypothesis[,4])
-	ptags <- ptags[ptags != 0]
-	gammaGLS_ci <- ptags
-	for (p in ptags) {
-            oneparameterhypothesis <- hypothesis[hypothesis[,4] == p,, drop=FALSE]
-            group_column <- oneparameterhypothesis[,1]
-            if (max(group_column) == min(group_column)) {
+	gammaGLS_ci <- c()
+        for (i in 1:parameters.length) {
 
-                groupnumber <- max(group_column)
-                groupn <- NList[[groupnumber]]
-                x <- gammahatGLS[p]
-                UL <- z(x) + critical_value*sqrt(1/(groupn-3))
-                UL <- tanh(UL)
-                UL <- round(UL, 3)
-                LL <- z(x) - critical_value*sqrt(1/(groupn-3))
-                LL <- tanh(LL)
-                LL <- round(LL, 3)
+            parameter <- parameters[i]
+            corrected_alpha <- 0.05/parameters.length
+            critical_value <- qnorm(1-corrected_alpha/2)
+            parameter.groups <- unique(hypothesis[hypothesis[,4] == parameter, 1]) ## Groups of correlations assigned paramter i
+            parameter.sample.sizes <- NList[parameter.groups] ## Sample sizes of the above groups
+            N <- sum(parameter.sample.sizes)
+            point.estimate <- gammahatGLS[i]
 
-                gammaGLS_ci[p] <- paste0('[',LL,', ',UL,']')
-
-            } else {
-                gammaGLS_ci[p] <- ''
-            }
-	}
+            UL <- z(point.estimate) + critical_value*sqrt(1/(N-3))
+            UL <- tanh(UL)
+            UL <- round(UL, 3)
+            LL <- z(point.estimate) - critical_value*sqrt(1/(N-3))
+            LL <- tanh(LL)
+            LL <- round(LL, 3)
+            gammaGLS_ci[i] <- paste0('[',LL,', ',UL,']')
+        }
     }
 
     temp <- t(e)%*%OmegaHatInverse%*%e
@@ -244,20 +239,12 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
 
     ## If there are parameter tags, generate an estimates table
-    if (parameters.length > 0) {
-        gammahatDisplay <- matrix(0, nrow=parameters.length, ncol=3)
-        parameters <- unique(hypothesis[, 4])
-        parameters <- parameters[parameters > 0]
-        for (i in 1:parameters.length) {
-            gammahatDisplay[i,1] <- round(parameters[i],3)
-            gammahatDisplay[i,2] <- round(gammahatGLS[i,1],3)
-            gammahatDisplay[i,3] <- round(sqrt(covgamma[i,i]),3)
-            if (gammahatDisplay[i,3] == 0) {
-                gammahatDisplay[i,3] <- '< 0.001'
-            }
-        }
+    if (no.parameters == FALSE) {
+        gammahatDisplay <- cbind(parameters, gammahatGLS[,1], covgamma[,1])
+        gammahatDisplay[,2:3] <- round(gammahatDisplay[,2:3], 3)
         gammahatDisplay <- cbind(gammahatDisplay, gammaGLS_ci)
-        colnames(gammahatDisplay) <- c("Parameter Tag", "Estimate", "Standard Error", paste0(100*(1-corrected_alpha),'% Confidence Interval'))
+        confidence.level <- round(100*(1-corrected_alpha), 3)
+        colnames(gammahatDisplay) <- c("Parameter Tag", "Estimate", "Standard Error", paste0(confidence.level,'% Confidence Interval'))
         rownames(gammahatDisplay) <- NULL
     } else {
         gammahatDisplay <- NA

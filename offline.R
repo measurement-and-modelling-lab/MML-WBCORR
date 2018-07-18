@@ -63,7 +63,7 @@ if (datatype == "rawdata") {
 } else {
     cat("\nInput your sample sizes in the following format: N1;N2\n")
     NList <- readline(prompt="")
-    NList <- strsplit(files, ";")[[1]]
+    NList <- strsplit(NList, ";")[[1]]
     if (length(NList) != (length(files) - 1)) {
         stop("There must be as many sample sizes as data files.")
     }
@@ -89,8 +89,10 @@ if (datatype == "rawdata") {
         stop("Invalid deletion method.")
     } else {
         deletion.index <- as.numeric(deletion.index)
-        deletion <- c("listwise", "pairwise", "")[deletion.index]
+        deletion <- c("listwise", "pairwise", "nodeletion")[deletion.index]
     }
+} else {
+    deletion <- "nodeletion"
 }
 
 

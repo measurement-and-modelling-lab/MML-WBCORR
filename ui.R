@@ -15,8 +15,8 @@ shinyUI(fluidPage(theme = "simplex.css",
     <title>Analytics^2 - About</title>
          <div class="bar">
     <b class="title">Measurement and Modelling Lab &nbsp; - &nbsp; Tools</b><br class="rwd-break"><b class="link">
-    <a href="https://shiny.rcg.sfu.ca/u/pserafin/rsquared/"><font color="white">MML-R2</font></a>
-    &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/wbcorr/"><font color="#00ca8a">MML-WBCORR</font></a>
+    <a href="https://shiny.rcg.sfu.ca/u/pserafin/MML-R2/"><font color="white">MML-R2</font></a>
+    &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/MML-WBCORR/"><font color="#00ca8a">MML-WBCORR</font></a>
     &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/csvgenerator/"><font color="white">CSV Generator</font></a>
 
 

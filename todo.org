@@ -1,5 +1,4 @@
  - Put off rounding until output
  - Check that the pairwise MVN test actually works
  - Simplify errorcheck.R
- - Simplify confidence interval code
  - Make MVN test a separate application?
