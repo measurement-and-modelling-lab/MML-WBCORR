@@ -3,37 +3,34 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
     ## Import functions
     adfCov <- dget("./wbcorr/adfCov.R")
-    assess_range <- dget("./wbcorr/assess_range.R")
     assess_mvn <- dget("./wbcorr/assess_mvn.R")
+    assess_range <- dget("./wbcorr/assess_range.R")
     compute4thOrderMoments <- dget("./wbcorr/compute4thOrderMoments.R")
     ComputeWLS <- dget("./wbcorr/ComputeWLS.R")
     errorcheck <- dget("./wbcorr/errorcheck.R")
-    findpos <- dget("./wbcorr/findpos.R")
-    FRHO <- dget("./wbcorr/FRHO.R")
     GetVecR <- dget("./wbcorr/GetVecR.R")
-    MakeSymmetricMatrix <- dget("./wbcorr/MakeSymmetricMatrix.R")
     MultivariateSK <- dget("./wbcorr/MultivariateSK.R")
     nCov <- dget("./wbcorr/nCov.R")
     pairwiseMVN <- dget("./wbcorr/pairwiseMVN.R")
-    tablegen <- dget("./wbcorr/tablegen.R")
-    z <- dget("./wbcorr/fisherz.R")
+    fisherTransform <- dget("./wbcorr/fisherTransform.R")
 
 
     ## Renumber parameter tags if a number is skipped
     parameter.tags <- hypothesis[hypothesis[,4] != 0, 4]
-    if (max(parameter.tags) > length(unique(parameter.tags))) {
-        hypothesis[hypothesis[,4] != 0, 4] <- as.numeric(as.factor(parameter.tags))
+    if (length(parameter.tags) != 0) {
+        if (max(parameter.tags) > length(unique(parameter.tags))) {
+            hypothesis[hypothesis[,4] != 0, 4] <- as.numeric(as.factor(parameter.tags))
+        }
     }
 
-
     ## Get the number of samples
-    A <- length(data)
+    data.length <- length(data)
 
 
     ## If the upper triangle of a correlation matrix is empty, make the matrix symmetric
     ## Otherwise, check whether the matrix is symmetric and if so return an error
     if (datatype == "correlation") {
-        for (i in 1:A) {
+        for (i in 1:data.length) {
             groupi <- data[[i]]
             upper.triangle.i <- groupi[upper.tri(groupi)]
             lower.triangle.i <- groupi[lower.tri(groupi)]
@@ -66,7 +63,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
         RList <- list()
         moments <- list()
         data.is.missing <- FALSE
-        for (jj in 1:A){
+        for (jj in 1:data.length){
             if (deletion == "pairwise") {
                 temp <- suppressWarnings(as.numeric(data[[jj]])) ## Convert anything that can't be interpreted as a number to NA
                 if (NA %in% temp) {
@@ -75,19 +72,18 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
                 data[[jj]] <- matrix(temp, nrow=nrow(data[[jj]])) ## as.numeric() converts the matrix into a list, unfortunately
             }
             moments[[jj]] <- compute4thOrderMoments(data, jj)
-            RList[[jj]] <- cor(data[[jj]], use="pairwise") ## Since we've already checked for missing data, we can use pairwise in every case
+            RList[[jj]] <- cor(data[[jj]], use="pairwise") ## If they have no missing data or are using listwise then pairwise doesn't do anything
         }
-        if (deletion == "pairwise" & !data.is.missing) {
+        if (deletion == "pairwise" & !data.is.missing) { ## Because the pairwise MVN check is an empty matrix with missing data
             stop("You can't use pairwise deletion without missing data.")
         }
     } else {
-        RList <- data ## If the data is already correlation then do nothing
+        RList <- data ## If the data is correlational then do nothing
     }
 
 
-
     ## Check that the correlation matrices are positive definite
-    for (i in 1:A) {
+    for (i in 1:data.length) {
         eigen_values <- eigen(RList[[i]])[[1]]
         if (TRUE %in% (eigen_values <= 0)) {
             if (deletion == 'pairwise') {
@@ -119,34 +115,36 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
     ## Amend N to match the deletion method
     if (deletion == 'pairwise') {
-        NList <- lapply(1:A, function(x) {
-            d <- data[[x]]
-            ##lowest <- min(colSums(!is.na(d)))
-            ns <- colSums(!is.na(d))
+        NList <- sapply(1:data.length, simplify=TRUE, function(i) {
+            groupi <- data[[i]]
+            ns <- colSums(!is.na(groupi))
             hmean <- 1/mean(1/ns)
-            hmean <- round(hmean, 1)
+            hmean <- round(hmean, 1) ## Should this really be rounded?
             hmean
         })
     } else if (deletion == 'listwise') {
-        NList <- lapply(1:A, function(x) {
-            nrow(data[[x]])
+        NList <- sapply(data, simplify=TRUE, function(group.i) {
+            nrow(group.i)
         })
     }
 
+
     ## Create a matrix with the sample sizes for the groups referenced in the rows of the hypothesis matrix along its diagonal
-    NList <- as.numeric(NList) ## Necessary for some reason
     nVector <- NList[hypothesis[,1]] - 1
     nMatrix <- diag(nVector, nrow=length(nVector))
 
 
     ## Check if there are any parameter tags; if there are, create delta
-    delta <- sapply(1:max(hypothesis[,4]), function(p) as.numeric(p == hypothesis[,4]) )
-    no.parameters <- max(delta) == 0
+    delta <- sapply(1:max(hypothesis[,4]), function(p) {
+        as.numeric(p == hypothesis[,4])
+    })
+    no.parameters <- max(hypothesis[,4]) == 0
+
 
 
     ## Create a vector of fixed values
     hypothesis[hypothesis[,4] != 0, 5] <- 0
-    rhostar <- hypothesis[,5]
+    rhostar <- hypothesis[,5,drop=FALSE]
 
 
     ## Create WLS (OLS?) estimates
@@ -164,8 +162,8 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
         a <- hypothesis[kk,1]
         i <- hypothesis[kk,2]
         j <- hypothesis[kk,3]
-        RWLSList[[a]][[i,j]] <- WLSVec[[kk,1]]
-        RWLSList[[a]][[j,i]] <- WLSVec[[kk,1]]
+        RWLSList[[a]][i,j] <- WLSVec[kk,1]
+        RWLSList[[a]][j,i] <- WLSVec[kk,1]
     }
 
 
@@ -221,13 +219,13 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
             critical_value <- qnorm(1-corrected_alpha/2)
             parameter.groups <- unique(hypothesis[hypothesis[,4] == parameter, 1]) ## Groups of correlations assigned paramter i
             parameter.sample.sizes <- NList[parameter.groups] ## Sample sizes of the above groups
-            N <- sum(parameter.sample.sizes)
+            N <- sum(parameter.sample.sizes) ## What about the case where you assert the equality of two correlations from one group and one from another?
             point.estimate <- gammahatGLS[i]
 
-            UL <- z(point.estimate) + critical_value*sqrt(1/(N-3))
+            UL <- fisherTransform(point.estimate) + critical_value*sqrt(1/(N-3))
             UL <- tanh(UL)
             UL <- round(UL, 3)
-            LL <- z(point.estimate) - critical_value*sqrt(1/(N-3))
+            LL <- fisherTransform(point.estimate) - critical_value*sqrt(1/(N-3))
             LL <- tanh(LL)
             LL <- round(LL, 3)
             gammaGLS_ci[i] <- paste0('[',LL,', ',UL,']')

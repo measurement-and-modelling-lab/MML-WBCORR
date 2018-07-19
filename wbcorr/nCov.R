@@ -1,4 +1,4 @@
-function (a,i,j,b,k,h,Rlist) {
+function (a, i, j, b, k, h, Rlist) {
 
     if (a != b) {
         cov <- 0

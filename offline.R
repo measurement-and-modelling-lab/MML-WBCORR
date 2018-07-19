@@ -59,7 +59,7 @@ if (file.exists) {
 
 ## Generate sample size list
 if (datatype == "rawdata") {
-    NList <- lapply(data, function(group) nrow(group))
+    NList <- sapply(data, simplify=TRUE, function(group) nrow(group))
 } else {
     cat("\nInput your sample sizes in the following format: N1;N2\n")
     NList <- readline(prompt="")

@@ -98,12 +98,12 @@ shinyServer(function(input, output, session) {
         if (datatype == "correlation") {
             for (i in 1:data.length) {
                 validate(need(eval(parse(text = paste0('input$samplesize',i))), ""))
-                NList[[i]] <- eval(parse(text = paste0('input$samplesize',i)))
+                NList[i] <- eval(parse(text = paste0('input$samplesize',i)))
             }
         } else {
-            for (i in 1:data.length) {
-                NList[[i]] <- nrow(data[[i]])
-            }
+            NList <- sapply(data, simplify=TRUE, function(i) {
+                nrow(i)
+            })
         }
         NList <- as.numeric(NList)
 
@@ -147,7 +147,7 @@ shinyServer(function(input, output, session) {
             RList[[i]] <- round(RList[[i]], 3)
             variables <- nrow(RList[[i]])
             labels <- paste0("<b>X<sub>", 1:variables, "</sub></b>")
-            caption <- paste0("Input Correlation Matrix #", i, " (N=", NList[[i]], ")")
+            caption <- paste0("Input Correlation Matrix #", i, " (N=", NList[i], ")")
             html.output <- paste0(html.output, htmlTable(RList[[i]], align="r", caption=caption, rnames=labels, header=labels, align.header="r", css.cell = "padding-left: .5em; padding-right: .2em;"))
         }
 
@@ -159,19 +159,20 @@ shinyServer(function(input, output, session) {
             RWLSList[[i]] <- round(RWLSList[[i]], 3)
             variables <- nrow(RList[[i]])
             labels <- paste0("<b>X<sub>", 1:variables, "</sub></b>")
-            caption <- paste0("OLS Estimates Matrix #", i, " (N=", NList[[i]], ")")
+            caption <- paste0("OLS Matrix #", i, " (N=", NList[i], ")")
             html.output <- paste0(html.output, htmlTable(RWLSList[[i]], align="r", caption=caption, rnames=labels, header=labels, align.header="r", css.cell = "padding-left: .5em; padding-right: .2em;"))
         }
 
 
         ## Print the parameter estimates
         gammahatDisplay <- output[[3]]
-        gammahatDisplay <- gammahatDisplay[order(gammahatDisplay[,1]), , drop=FALSE] ## Order the estimates by parameter tag
-        if (!identical(NA, gammahatDisplay)) {
-            header <- paste0(estimation.method, " Parameter Estimates")
-            html.output <- paste0(html.output, htmlTable(gammahatDisplay, align="c", caption=header))
+        if (is.matrix(gammahatDisplay)) {
+            gammahatDisplay <- gammahatDisplay[order(gammahatDisplay[,1]), , drop=FALSE] ## Order the estimates by parameter tag
+            if (!identical(NA, gammahatDisplay)) {
+                header <- paste0(estimation.method, " Parameter Estimates")
+                html.output <- paste0(html.output, htmlTable(gammahatDisplay, align="c", caption=header))
+            }
         }
-
 
 
         ## Return significance test results

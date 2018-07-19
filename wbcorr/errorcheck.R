@@ -1,7 +1,5 @@
 function (data, datatype, hypothesis, deletion) {
 
-    MakeSymmetricMatrix <- dget("./wbcorr/MakeSymmetricMatrix.R")
-
     A <- length(data)
     
     if (ncol(hypothesis) != 5) {
