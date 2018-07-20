@@ -15,14 +15,6 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     fisherTransform <- dget("./wbcorr/fisherTransform.R")
 
 
-    ## Renumber parameter tags if a number is skipped
-    parameter.tags <- hypothesis[hypothesis[,4] != 0, 4]
-    if (length(parameter.tags) != 0) {
-        if (max(parameter.tags) > length(unique(parameter.tags))) {
-            hypothesis[hypothesis[,4] != 0, 4] <- as.numeric(as.factor(parameter.tags))
-        }
-    }
-
     ## Get the number of samples
     data.length <- length(data)
 
@@ -45,6 +37,15 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
     ## Check for a variety of problems
     errorcheck(data, datatype, hypothesis, deletion)
+
+
+    ## Renumber parameter tags if a number is skipped
+    parameter.tags <- hypothesis[hypothesis[,4] != 0, 4]
+    if (length(parameter.tags) != 0) {
+        if (max(parameter.tags) > length(unique(parameter.tags))) {
+            hypothesis[hypothesis[,4] != 0, 4] <- as.numeric(as.factor(parameter.tags))
+        }
+    }
 
 
     ## Apply listwise deletion, if requested

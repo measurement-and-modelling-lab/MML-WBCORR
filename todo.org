@@ -1,4 +1,3 @@
- - Simplify errorcheck.R
  - Check that the pairwise MVN test actually works
  - Make MVN test a separate application?
  - Should the harmonised mean of the Ns in pairwise deletion be rounded?
