@@ -26,18 +26,17 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     ## Get the number of samples
     data.length <- length(data)
 
-
+    
     ## If the upper triangle of a correlation matrix is empty, make the matrix symmetric
-    ## Otherwise, check whether the matrix is symmetric and if so return an error
+    ## Otherwise, check whether the matrix is symmetric and if not return an error
     if (datatype == "correlation") {
         for (i in 1:data.length) {
             groupi <- data[[i]]
-            upper.triangle.i <- groupi[upper.tri(groupi)]
-            lower.triangle.i <- groupi[lower.tri(groupi)]
-            if (all(is.na(upper.triangle.i))) {
-                groupi[upper.tri(groupi)] <- lower.triangle.i
-                data[[i]] <- groupi
-            } else if (!all(lower.triangle.i == upper.triangle.i)) {
+            current.upper.triangle <- groupi[upper.tri(groupi)]
+            symmetric.upper.triangle <- t(groupi)[upper.tri((groupi))]
+            if (all(is.na(current.upper.triangle))) {
+                groupi[upper.tri(groupi)] <- symmetric.upper.triangle
+            } else if (!all(current.upper.triangle == symmetric.upper.triangle)) {
                 stop("Correlation matrix is not symmetric.")
             }
         }
