@@ -4,6 +4,10 @@ require(shinythemes) || install.packages(shinythemes)
 
 shinyServer(function(input, output, session) {
     options(shiny.maxRequestSize = 30 * 1024^2 )
+
+    observe({
+        options(shiny.sanitize.errors = FALSE)
+    })
     
     output$estimationmethodInput <- renderUI({
         html_ui <- " "

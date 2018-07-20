@@ -81,8 +81,6 @@ shinyUI(fluidPage(theme = "simplex.css",
 
     headerPanel('', windowTitle = 'MML-WBCORR'),
 
-    options(shiny.sanitize.errors = FALSE),
-
     sidebarLayout(
     sidebarPanel(
         radioButtons("datatype", "Data type:", c("Correlation data" = "correlation", "Raw data" = "rawdata")),
