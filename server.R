@@ -83,9 +83,9 @@ shinyServer(function(input, output, session) {
         tryCatch({
             read.csv(file=input$hypothesisfile[[4]], head=FALSE, sep=",")
         }, warning = function(w) {
-            stop("There was a problem reading one of your hypothesis file.")
+            stop("There was a problem reading your hypothesis file.")
         }, error = function(e) {
-            stop("There was a problem reading one of your hypothesis file.")
+            stop("There was a problem reading your hypothesis file.")
         })
 
 

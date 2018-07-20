@@ -12,11 +12,11 @@ function (data, datatype, hypothesis, deletion) {
         stop('The hypothesis matrix has a non-numeric element.')
     } else if (!all(abs(hypothesis[,5]) <= 1)) {
         stop('The hypothesis matrix has a fixed value that is less than -1 or greater than 1.')
-    } else if (!all(hypothesis[,1:4] %% 1 > 0)) {
+    } else if (!all(hypothesis[,1:4] %% 1 == 0)) {
         stop('The hypothesis matrix has a non-integer where it shouldn\'t.')
     } else if (!all(hypothesis[,1:4] > 0)) {
         stop('The hypothesis matrix has a negative or zero number where it shouldn\'t.')
-    } else if (group_column > data.length) {
+    } else if (!all(hypothesis[,1] <= data.length)) {
         stop('The hypothesis matrix references a non-existent group.')
     }
 
@@ -67,7 +67,7 @@ function (data, datatype, hypothesis, deletion) {
 
         if (datatype == 'correlation') {
 
-            if (!all(abs(group) < 1)) {
+            if (!all(abs(group) <= 1)) {
                 stop('Correlation matrix has a value that is less than -1 or greater than 1.')
             }
 

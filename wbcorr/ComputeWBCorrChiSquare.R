@@ -25,15 +25,16 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
         for (i in 1:data.length) {
             groupi <- data[[i]]
             current.upper.triangle <- groupi[upper.tri(groupi)]
-            symmetric.upper.triangle <- t(groupi)[upper.tri((groupi))]
+            symmetric.upper.triangle <- t(groupi)[upper.tri(t(groupi))]
             if (all(is.na(current.upper.triangle))) {
                 groupi[upper.tri(groupi)] <- symmetric.upper.triangle
+                data[[i]] <- groupi
             } else if (!all(current.upper.triangle == symmetric.upper.triangle)) {
                 stop("Correlation matrix is not symmetric.")
             }
         }
     }
-    
+
 
     ## Check for a variety of problems
     errorcheck(data, datatype, hypothesis, deletion)
