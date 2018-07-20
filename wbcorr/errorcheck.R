@@ -14,10 +14,14 @@ function (data, datatype, hypothesis, deletion) {
         stop('The hypothesis matrix has a fixed value that is less than -1 or greater than 1.')
     } else if (!all(hypothesis[,1:4] %% 1 == 0)) {
         stop('The hypothesis matrix has a non-integer where it shouldn\'t.')
-    } else if (!all(hypothesis[,1:4] > 0)) {
-        stop('The hypothesis matrix has a negative or zero number where it shouldn\'t.')
-    } else if (!all(hypothesis[,1] <= data.length)) {
+    } else if (!all(hypothesis[,1:3] > 0)) {
+        stop('The hypothesis matrix has a non-positive number where it shouldn\'t.')
+    } else if (!all(hypothesis[,4] >= 0)) {
+        stop('The parameter tag column of the hypothesis matrix has a negative number.')
+    } else if (!all(hypothesis[,1] == 1)) {
         stop('The hypothesis matrix references a non-existent group.')
+    } else if (TRUE %in% duplicated(hypothesis[,1:3])) {
+        stop('The hypothesis matrix references the same correlation twice.')
     }
 
     for (i in 1:nrow(hypothesis)) {
