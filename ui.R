@@ -16,8 +16,9 @@ shinyUI(fluidPage(theme = "simplex.css",
          <div class="bar">
     <b class="title">Measurement and Modelling Lab &nbsp; - &nbsp; Tools</b><br class="rwd-break"><b class="link">
     <a href="https://shiny.rcg.sfu.ca/u/pserafin/MML-R2/"><font color="white">MML-R2</font></a>
+    &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/MML-Multicorr/"><font color="white">MML-Multicorr</font></a>
     &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/MML-WBCORR/"><font color="#00ca8a">MML-WBCORR</font></a>
-    &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/csvgenerator/"><font color="white">CSV Generator</font></a>
+    &emsp;&nbsp;<a href="https://shiny.rcg.sfu.ca/u/pserafin/csv-generator/"><font color="white">CSV Generator</font></a>
 
 
 
@@ -79,6 +80,8 @@ shinyUI(fluidPage(theme = "simplex.css",
     ),
 
     headerPanel('', windowTitle = 'MML-WBCORR'),
+
+    options(shiny.sanitize.errors = FALSE),
 
     sidebarLayout(
     sidebarPanel(
