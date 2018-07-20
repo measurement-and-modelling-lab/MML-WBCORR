@@ -31,9 +31,11 @@ function (data, datatype, hypothesis, deletion) {
         row.index <- hypothesis[i,2]
         col.index <- hypothesis[i,3]
         if (row.index > group.variables) {
-            stop('The hypothesis matrix references a non-existent variable.')
+            message <- paste("Row", i, "of the hypothesis matrix references a non-existent variable.")
+            stop(message)
         } else if (col.index > group.variables) {
-            stop('The hypothesis matrix references a non-existent variable.')
+            message <- paste("Row", i, "of the hypothesis matrix references a non-existent variable.")
+            stop(message)
         }
     }
 
@@ -45,25 +47,29 @@ function (data, datatype, hypothesis, deletion) {
 
         ## Missing values must be either empty or NA
         if (!is.numeric(group)) {
-            stop("Data matrix has at least one non-numeric entry.")
+            message <- paste("Raw data matrix", jj, "has at least one non-numeric entry")
+            stop(message)
         }
 
         if (deletion == "nodeletion") {
             if (NA %in% group) {
-                stop('Data matrix has at least one empty entry.')
+                message <- paste("Raw data matrix", jj, "has at least one empty entry")
+                stop(message)
             }
         }
 
         if (datatype == "rawdata") {
 
             if (rows <= cols) {
-                stop("A raw data matrix must have more participants than variables.")
+                message <- paste("Raw data matrix", jj, "has as many or more variables than participants.")
+                stop(message)
             }
 
             if (deletion != "nodeletion") {
                 R <- cor(group, use="pairwise")
                 if (NA %in% R) {
-                    stop("There is too much missing data.")
+                    message <- paste("Raw data matrix", jj, "has too much missing data to proceed.")
+                    stop(message)
                 }
             }
         }
@@ -71,11 +77,13 @@ function (data, datatype, hypothesis, deletion) {
         if (datatype == 'correlation') {
 
             if (!all(abs(group) <= 1)) {
-                stop('Correlation matrix has a value that is less than -1 or greater than 1.')
+                message <- paste("Correlation matrix", jj, "has a value that is less htan -1 or greater than 1.")
+                stop(message)
             }
 
             if (rows != cols) {
-                stop('Correlation matrix is not square.')
+                message <- paste("Correlation matrix", jj, "is not square.")
+                stop(message)
             }
         }
     }

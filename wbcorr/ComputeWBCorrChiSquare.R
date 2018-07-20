@@ -30,7 +30,8 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
                 groupi[upper.tri(groupi)] <- symmetric.upper.triangle
                 data[[i]] <- groupi
             } else if (!all(current.upper.triangle == symmetric.upper.triangle)) {
-                stop("Correlation matrix is not symmetric.")
+                message <- paste("Correlation matrix", i, "is not symmetric.")
+                stop(message)
             }
         }
     }
@@ -85,9 +86,8 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     for (i in 1:data.length) {
         eigen_values <- eigen(RList[[i]])[[1]]
         if (TRUE %in% (eigen_values <= 0)) {
-            if (deletion == 'pairwise') {
-                stop('Data matrix is not positive definite.')
-            }
+            message <- paste("Data matrix", i, "is not positive definite. If you've selected pairwise deletion, try listwise deletion.")
+            stop(message)
         }
     }
 
