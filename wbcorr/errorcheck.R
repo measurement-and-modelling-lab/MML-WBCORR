@@ -43,31 +43,30 @@ function (data, datatype, hypothesis, deletion) {
         rows <- nrow(group)
         cols <- ncol(group)
 
+        ## Missing values must be either empty or NA
+        if (!is.numeric(group)) {
+            stop("Data matrix has at least one non-numeric entry.")
+        }
+
+        if (deletion == "nodeletion") {
+            if (NA %in% group) {
+                stop('Data matrix has at least one empty entry.')
+            }
+        }
+
         if (datatype == "rawdata") {
 
             if (rows <= cols) {
                 stop("A raw data matrix must have more participants than variables.")
             }
 
-            if (deletion == "pairwise") {
+            if (deletion != "nodeletion") {
                 R <- cor(group, use="pairwise")
                 if (NA %in% R) {
-                    stop("There is too much missing data to use pairwise deletion.")
-                }
-            }
-
-            if (deletion == "nodeletion") {
-
-                if (NA %in% group) {
-                    stop('Data matrix has at least one empty entry.')
-                }
-
-                if (!is.numeric(group)) {
-                    stop("Data matrix has at least one non-numeric entry.")
+                    stop("There is too much missing data.")
                 }
             }
         }
-
 
         if (datatype == 'correlation') {
 

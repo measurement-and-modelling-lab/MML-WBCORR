@@ -51,10 +51,8 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
     ## Apply listwise deletion, if requested
     if (deletion == 'listwise') {
-        data <- lapply(data, function(x) {
-            temp <- suppressWarnings(as.numeric(x)) ## Convert anything that can't be interpreted as a number to NA
-            temp <- matrix(temp, nrow=nrow(x), ncol=ncol(x)) ## as.numeric() converts the matrix into a list, unfortunately
-            x <- temp[complete.cases(temp),] ## Delete rows with NAs
+        data <- lapply(data, function(groupi) {
+            groupi[complete.cases(groupi),] ## Remove rows with NAs
         })
     }
 
@@ -253,6 +251,9 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     ## Produce significance test results table
     plevel <- 1-pchisq(fGLS,df)
     sigtable <- matrix(round(c(fGLS, df, plevel), 3), nrow=1, ncol=3)
+    if (sigtable[1,3] == 0) {
+        sigtable[1,3] <- "< 0.001"
+    }
     colnames(sigtable) <- c("Chi Square", "df", "plevel")
     rownames(sigtable) <- NULL
 
