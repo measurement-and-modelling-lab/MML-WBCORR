@@ -192,7 +192,6 @@ shinyServer(function(input, output, session) {
                 html.output <- paste0(html.output, htmlTable(MardiaSK[[1]], align="c", caption="Assessment of the Distribution of the Observed Marginals"))
                 html.output <- paste0(html.output, htmlTable(MardiaSK[[2]], align="c", caption="Assessment of Multivariate Normality"))
             } else {
-                cat("\nAssessment of Multivariate Normality\n")
                 html.output <- paste0(html.output, htmlTable(MardiaSK[[1]], align="c", caption="Assessment of Multivariate Skewness"))
                 html.output <- paste0(html.output, htmlTable(MardiaSK[[2]], align="c", caption="Assessment of Multivariate Kurtosis"))
             }
