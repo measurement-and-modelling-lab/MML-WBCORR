@@ -1,4 +1,4 @@
-function (data, datatype, hypothesis, deletion) {
+function (data, datatype, hypothesis, deletion, NList) {
 
     data.length <- length(data)
     
@@ -42,6 +42,7 @@ function (data, datatype, hypothesis, deletion) {
     for (jj in 1:data.length) {
 
         group <- data[[jj]]
+        N <- NList[jj]
         rows <- nrow(group)
         cols <- ncol(group)
 
@@ -75,6 +76,10 @@ function (data, datatype, hypothesis, deletion) {
         }
 
         if (datatype == 'correlation') {
+
+            if (N <= cols) {
+                stop("You have as many or more variables than observations.")
+            }
 
             if (!all(abs(group) <= 1)) {
                 message <- paste("Correlation matrix", jj, "has a value that is less htan -1 or greater than 1.")

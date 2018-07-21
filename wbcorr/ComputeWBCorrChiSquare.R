@@ -38,7 +38,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
 
     ## Check for a variety of problems
-    errorcheck(data, datatype, hypothesis, deletion)
+    errorcheck(data, datatype, hypothesis, deletion, NList)
 
 
     ## Renumber parameter tags if a number is skipped
