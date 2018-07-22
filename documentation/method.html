@@ -1,13 +1,13 @@
 <br>
 
   <p>
-    The estimation methods offered by WBCORR are GLS (generalised least squares), ADF (asymptotically distribution-free), and a "two-step" version of each (TSGLS and TSADF). The salient difference between GLS and ADF is that whereas GLS assumes multivariate normality, ADF does not. However, ADF relies on sample estimates of fourth-order moments, so it requires raw data and is incompatible with pairwise deletion. Also, since these estimates have large standard errors for small to moderate sample sizes, employing ADF may result in a considerable loss of power: it should only be used if the assumption of multivariate normality is untenable. A test of multivariate normality is provided when you use raw data. The relation between TSGLS and TSADF is the same, except that they provide superior estimates compared to the one. 
+    The estimation methods offered by WBCORR are GLS (generalised least squares), ADF (asymptotically distribution-free), and a "two-step" version of each (TSGLS and TSADF). The salient difference between GLS and ADF is that whereas GLS assumes multivariate normality, ADF does not. However, ADF relies on sample estimates of fourth-order moments, so it requires raw data and is incompatible with pairwise deletion. Also, since these estimates have large standard errors for small to moderate sample sizes, employing ADF may result in a considerable loss of power: it should only be used if the assumption of multivariate normality is untenable. A test of multivariate normality is provided when you use raw data. The relation between TSGLS and TSADF is the same, except that they provide superior estimates compared to the one.
   </p>
 
   <p>
-    <b>In short:</b> choose TSGLS if MVN is tenable and TSADF otherwise,
+    <b>In short:</b> choose TSGLS if multivariate normality is tenable and TSADF otherwise.
   </p>
 
   <p>
-    Listwise and pairwise deletion are offered to deal with missing data. In pairwise deletion, the sample size for each group is the harmonic mean of the number of observed scores for each variable, rounded to one decimal place. Non-numeric (and only non-numeric) values are interpreted as missing values.
+    Listwise and pairwise deletion are offered to deal with missing data. In pairwise deletion, the sample size for each group is the harmonic mean of the number of observed scores for each variable, rounded to one decimal place. Empty and NA values are interpreted as missing values.
   </p>

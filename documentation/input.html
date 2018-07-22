@@ -51,6 +51,12 @@
 </pre>
 
 <p>
+  And here is what that hypothesis would look like in the CSV Generator:
+</p>
+
+<img src="./hypothesis.png", style="margin-bottom: 10px; margin-top: 10px; margin-left:40px">
+
+<p>
   Each row of the hypothesis matrix is of the form: group, row, column, parameter tag, fixed value. The first three columns specify a correlation, conventionally from the lower half of the correlation matrix, and the fourth and fifth make an assertion about the value of that correlation. Correlations with the same positive integer in the parameter tag column are hypothesised to be equal, and correlations with a parameter tag of 0 are hypothesised to be equal to the value of their fixed value column. Correlations with different parameter tags are not hypothesised to be unequal. If a parameter tag is assigned to a single correlation then the output will include an estimate of that correlation, but the p value for the test will be the same as if it hadn't been included.
 </p>
 
