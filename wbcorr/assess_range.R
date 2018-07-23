@@ -51,11 +51,11 @@ function (data) {
                 p_zr <- 2*pnorm(zr)
             }
 
+            ## Round and assemble row
+            source("./wbcorr/pRound.R")
             zr <- round(zr, 3)
-            p_zr <- round(p_zr, 3)
-
-            new_row <- c(jj, variable, i_n, zr, p_zr)
-            zr_table[[jj]] <- new_row
+            p_zr <- pRound(p_zr)
+            zr_table[[jj]] <- c(jj, variable, i_n, zr, p_zr)
 
         }
     }

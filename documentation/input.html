@@ -1,6 +1,6 @@
 <br>
 <p>
-  Input consists of a hypothesis matrix and one or more raw or correlation data files. Input files should be in headerless, comma-separated (.csv) format. The "CSV Generator" linked in the header bar is a web application for creating properly-formatted input for the one or two group case.
+  Input consists of a hypothesis matrix and one or more raw or correlation data files. Input files should be in headerless, comma-separated (.csv) format. The "CSV Generator" linked in the header bar is a web application for creating properly-formatted correlation files, and one to two group hypothesis files.
 </p>
 
 <p>
@@ -16,17 +16,21 @@
 </pre>
 
 <p>
-  Each row is a participant or observation, and each column is a variable. Note the absence of an ID column, which would be interpreted as a variable. Here is a sample correlation data file:
+  Each row is a participant or observation, and each column is a variable. Note the absence of an ID column, which would be interpreted as a variable.
+</p>
+
+<p>
+Here is a sample correlation data file:
 </p>
 
 <pre class="example" style="margin-left:40px">
-  1.0,,
-  0.2,1.0,
+  1.0
+  0.2,1.0
   0.3,0.4,1.0
 </pre>
 
 <p>
-  Data from the upper half of the correlation matrix is optional, but the commas which would have separated the absent data are not. In SPSS, you can produce a plain correlation matrix such as this using the following syntax:
+  Data from the upper half of the correlation matrix is optional. In SPSS, you can produce a plain correlation matrix such as this using the following syntax:
 </p>
 
 <pre class="example" style="margin-left:40px">
@@ -65,5 +69,5 @@
 </p>
 
 <p>
-  The parameter tag column has a "hole" in it if the value of the greatest parameter tag is not equal to the number of unique non-zero parameter tags. For example, if the parameter tag column were [1, 1, 2, 2, 4, 4], then it would have a hole because 3 is skipped. If the column has a hole then it is renumbered. This does not affect the result of the test, and the amended hypothesis matrix is included in the output.
+  The parameter tag column has a "hole" in it if the value of the greatest parameter tag is not equal to the number of unique non-zero parameter tags. For example, if the parameter tag column were [1, 1, 2, 2, 4, 4], then it would have a hole because 3 is skipped. If the column has a hole then it is renumbered, in thise case to [1, 1, 2, 2, 3, 3]. This does not affect the result of the test, and the amended hypothesis matrix is included in the output.
 </p>

@@ -247,13 +247,13 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
         gammahatDisplay <- NA
     }
 
-
-    ## Produce significance test results table
     plevel <- 1-pchisq(fGLS,df)
+
+    ## Round and assemble output
+    source("./wbcorr/pRound.R")
+    fGLS <- round(fGLS, 3)
+    plevel <- pRound(plevel)
     sigtable <- matrix(round(c(fGLS, df, plevel), 3), nrow=1, ncol=3)
-    if (sigtable[1,3] == 0) {
-        sigtable[1,3] <- "< 0.001"
-    }
     colnames(sigtable) <- c("Chi Square", "df", "plevel")
     rownames(sigtable) <- NULL
 
