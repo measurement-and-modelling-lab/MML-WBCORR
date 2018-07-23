@@ -18,7 +18,7 @@ function (data, datatype, hypothesis, deletion, NList) {
         stop('The hypothesis matrix has a non-positive number where it shouldn\'t.')
     } else if (!all(hypothesis[,4] >= 0)) {
         stop('The parameter tag column of the hypothesis matrix has a negative number.')
-    } else if (!all(hypothesis[,1] == 1)) {
+    } else if (!all(hypothesis[,1] <= data.length)) {
         stop('The hypothesis matrix references a non-existent group.')
     } else if (TRUE %in% duplicated(hypothesis[,1:3])) {
         stop('The hypothesis matrix references the same correlation twice.')
