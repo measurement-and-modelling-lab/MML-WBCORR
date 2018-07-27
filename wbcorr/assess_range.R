@@ -51,16 +51,15 @@ function (data) {
                 p_zr <- 2*pnorm(zr)
             }
 
-            ## Round and assemble row
-            source("./wbcorr/pRound.R")
-            zr <- round(zr, 3)
-            p_zr <- pRound(p_zr)
+            ## Assemble row
             zr_table[[jj]] <- c(jj, variable, i_n, zr, p_zr)
 
         }
     }
 
     zr_table <- do.call(rbind, zr_table)
+
+    zr_table[,2:3] <- SensibleRounding(zr_table[,2:3])
     colnames(zr_table) <- c('Group','Variable','Missing values','Z<sub>R</sub>', 'plevel (two-tail)')
 
     return(list(zr_table, missing))

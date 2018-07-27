@@ -2,17 +2,18 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
 
     ## Import functions
+    ComputeWLS <- dget("./wbcorr/ComputeWLS.R")
+    GetVecR <- dget("./wbcorr/GetVecR.R")
+    MultivariateSK <- dget("./wbcorr/MultivariateSK.R")
+    SensibleRounding <- dget("./wbcorr/SensibleRounding.R")
     adfCov <- dget("./wbcorr/adfCov.R")
     assess_mvn <- dget("./wbcorr/assess_mvn.R")
     assess_range <- dget("./wbcorr/assess_range.R")
     compute4thOrderMoments <- dget("./wbcorr/compute4thOrderMoments.R")
-    ComputeWLS <- dget("./wbcorr/ComputeWLS.R")
     errorcheck <- dget("./wbcorr/errorcheck.R")
-    GetVecR <- dget("./wbcorr/GetVecR.R")
-    MultivariateSK <- dget("./wbcorr/MultivariateSK.R")
+    fisherTransform <- dget("./wbcorr/fisherTransform.R")
     nCov <- dget("./wbcorr/nCov.R")
     pairwiseMVN <- dget("./wbcorr/pairwiseMVN.R")
-    fisherTransform <- dget("./wbcorr/fisherTransform.R")
 
 
     ## Get the number of samples
@@ -214,11 +215,25 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
         for (i in 1:parameters.length) {
 
             parameter <- parameters[i]
+            parameter.groups <- unique(hypothesis[hypothesis[,4] == parameter, 1]) ## Groups of correlations assigned paramter i
+
+            ## Generate critical value
             corrected_alpha <- 0.05/parameters.length
             critical_value <- qnorm(1-corrected_alpha/2)
-            parameter.groups <- unique(hypothesis[hypothesis[,4] == parameter, 1]) ## Groups of correlations assigned paramter i
+
+            ## Build weight
+            number.of.groups <- length(parameter.groups)
+            number.of.correlations <- nrow(hypothesis[hypothesis[,4] == parameter,])
+            weight <-number.of.correlations / number.of.groups
+
+            ## Extract sample sizes
             parameter.sample.sizes <- NList[parameter.groups] ## Sample sizes of the above groups
-            N <- sum(parameter.sample.sizes) ## What about the case where you assert the equality of two correlations from one group and one from another?
+
+            ## Calculate N
+            N <- sum(parameter.sample.sizes) * weight
+            # The avg. number of correlations per group, times the sum of the N for all the groups
+
+            
             point.estimate <- gammahatGLS[i]
 
             UL <- fisherTransform(point.estimate) + critical_value*sqrt(1/(N-3))
@@ -231,6 +246,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
         }
     }
 
+
     temp <- t(e)%*%OmegaHatInverse%*%e
     fGLS <- temp[[1,1]] ## chi square statistic
 
@@ -238,7 +254,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     ## If there are parameter tags, generate an estimates table
     if (no.parameters == FALSE) {
         gammahatDisplay <- cbind(parameters, gammahatGLS[,1], covgamma[,1])
-        gammahatDisplay[,2:3] <- round(gammahatDisplay[,2:3], 3)
+        gammahatDisplay[,2:3] <- SensibleRounding(gammahatDisplay[,2:3], 3)
         gammahatDisplay <- cbind(gammahatDisplay, gammaGLS_ci)
         confidence.level <- round(100*(1-corrected_alpha), 3)
         colnames(gammahatDisplay) <- c("Parameter Tag", "Estimate", "Standard Error", paste0(confidence.level,'% Confidence Interval'))
@@ -250,10 +266,8 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     plevel <- 1-pchisq(fGLS,df)
 
     ## Round and assemble output
-    source("./wbcorr/pRound.R")
-    fGLS <- round(fGLS, 3)
-    plevel <- pRound(plevel)
-    sigtable <- matrix(round(c(fGLS, df, plevel), 3), nrow=1, ncol=3)
+    sigtable <- matrix(c(fGLS, df, plevel), nrow=1, ncol=3)
+    sigtable <- SensibleRounding(sigtable, 3)
     colnames(sigtable) <- c("Chi Square", "df", "plevel")
     rownames(sigtable) <- NULL
 

@@ -1,5 +1,6 @@
 function (data) {
 
+    SensibleRounding <- dget("./wbcorr/SensibleRounding.R")
 
     m2_table <- list()
 
@@ -24,14 +25,12 @@ function (data) {
             p_m2 <- 2*pnorm(M2)
         }
 
-        ## Round and assemble output
-        source("./wbcorr/pRound.R")
-        M2 <- round(M2, 3)
-        p_m2 <- pRound(p_m2)
+        ## Assemble output
         m2_table[[jj]] <- c(jj, M2, p_m2)
     }
 
     m2_table <- do.call(rbind, m2_table)
+    m2_table[,c(2,3,4)] <- SensibleRounding(m2_table[,c(2,3,4)])
     colnames(m2_table) <- c('Group','M<sub>2</sub>','plevel (two-tail)')
 
     return(m2_table)
