@@ -64,16 +64,17 @@ shinyServer(function(input, output, session) {
 
             validate(need(eval(parse(text = paste0('input$datafile',i))), "")) ## Check that data file i exists
 
-            ## Check that R can read the data file as a .csv
+            ## Try to import the data file, return an error if it's not readable as a .csv
+            cat("\n", file=eval(parse(text = paste0('input$datafile',i,'[[4]]'))), append = TRUE) ## append the necessary line break to the end
             tryCatch({
                 read.csv(file=eval(parse(text = paste0('input$datafile',i,'[[4]]'))), head=FALSE)
+                data[[i]] <- as.matrix(read.csv(file=eval(parse(text = paste0('input$datafile',i,'[[4]]'))), head=FALSE))
             }, warning = function(w) {
                 stop("There was a problem reading one of your .csv files. You may need to add a blank line to the end of the file.")
             }, error = function(e) {
                 stop("There was a problem reading one of your .csv files. You may need to add a blank line to the end of the file.")
             })
 
-            data[[i]] <- as.matrix(read.csv(file=eval(parse(text = paste0('input$datafile',i,'[[4]]'))), head=FALSE))
 
             if (ncol(data[[i]]) > 16) {
                 stop("The web version of MML-WBCORR does not support more than 16 variables.")
@@ -82,19 +83,16 @@ shinyServer(function(input, output, session) {
         }
 
 
-        ## Check that hypothesis file is readable as a .csv
+        ## Try to import the hypothesis file, return an error if it's not readable as a .csv
         validate(need(input$hypothesisfile, ""))
+        cat("\n", file=input$hypothesisfile[[4]], append = TRUE) ## append the necessary line break to the end
         tryCatch({
-            read.csv(file=input$hypothesisfile[[4]], head=FALSE, sep=",")
+            hypothesis <- as.matrix(read.csv(file=input$hypothesisfile[[4]], head=FALSE, sep=","))
         }, warning = function(w) {
             stop("There was a problem reading your hypothesis file. You might need to add a blank line to the end of the file.")
         }, error = function(e) {
             stop("There was a problem reading your hypothesis file. You might need to add a blank line to the end of the file.")
         })
-
-
-        ## Read the hypothesis file
-        hypothesis <- as.matrix(read.csv(file=input$hypothesisfile[[4]], head=FALSE, sep=","))
 
 
         ## Import N (calculate if raw data) for each group
