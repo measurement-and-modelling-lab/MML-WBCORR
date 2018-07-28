@@ -1,6 +1,5 @@
 function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
-
     ## Import functions
     ComputeWLS <- dget("./wbcorr/ComputeWLS.R")
     GetVecR <- dget("./wbcorr/GetVecR.R")
@@ -224,16 +223,14 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
             ## Build weight
             number.of.groups <- length(parameter.groups)
             number.of.correlations <- nrow(hypothesis[hypothesis[,4] == parameter,])
-            weight <-number.of.correlations / number.of.groups
+            weight <- number.of.correlations / number.of.groups
 
             ## Extract sample sizes
             parameter.sample.sizes <- NList[parameter.groups] ## Sample sizes of the above groups
 
             ## Calculate N
             N <- sum(parameter.sample.sizes) * weight
-            # The avg. number of correlations per group, times the sum of the N for all the groups
 
-            
             point.estimate <- gammahatGLS[i]
 
             UL <- fisherTransform(point.estimate) + critical_value*sqrt(1/(N-3))
@@ -246,10 +243,8 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
         }
     }
 
-
     temp <- t(e)%*%OmegaHatInverse%*%e
     fGLS <- temp[[1,1]] ## chi square statistic
-
 
     ## If there are parameter tags, generate an estimates table
     if (no.parameters == FALSE) {
@@ -270,7 +265,6 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     sigtable <- SensibleRounding(sigtable, 3)
     colnames(sigtable) <- c("Chi Square", "df", "plevel")
     rownames(sigtable) <- NULL
-
 
     ## Return output tables
     output <- list(RList, RWLSList, gammahatDisplay, sigtable, MardiaSK, NList, hypothesis)
