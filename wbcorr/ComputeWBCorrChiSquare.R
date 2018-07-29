@@ -211,35 +211,27 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
 	## Produce confidence intervals on parameter estimates (strict Bonferroni)
 	gammaGLS_ci <- c()
-        for (i in 1:parameters.length) {
-
-            parameter <- parameters[i]
-            parameter.groups <- unique(hypothesis[hypothesis[,4] == parameter, 1]) ## Groups of correlations assigned paramter i
+        for (p in 1:parameters.length) {
 
             ## Generate critical value
             corrected_alpha <- 0.05/parameters.length
             critical_value <- qnorm(1-corrected_alpha/2)
 
-            ## Build weight
-            number.of.groups <- length(parameter.groups)
-            number.of.correlations <- nrow(hypothesis[hypothesis[,4] == parameter,])
-            weight <- number.of.correlations / number.of.groups
+            ## Calculate N (dot product of N per group and # of correlations per group with that parameter tag
+            groups <- hypothesis[hypothesis[,4] == p, 1]
+            groupFrequency <- as.vector(table(groups))
+            uniqueGroups <- sort(unique(groups))
+            perGroupN <- NList[uniqueGroups]
+            N <- perGroupN %*% groupFrequency
 
-            ## Extract sample sizes
-            parameter.sample.sizes <- NList[parameter.groups] ## Sample sizes of the above groups
-
-            ## Calculate N
-            N <- sum(parameter.sample.sizes) * weight
-
-            point.estimate <- gammahatGLS[i]
-
-            UL <- fisherTransform(point.estimate) + critical_value*sqrt(1/(N-3))
+            parameterEstimate <- gammahatGLS[p]
+            UL <- fisherTransform(parameterEstimate) + critical_value*sqrt(1/(N-3))
             UL <- tanh(UL)
             UL <- round(UL, 3)
-            LL <- fisherTransform(point.estimate) - critical_value*sqrt(1/(N-3))
+            LL <- fisherTransform(parameterEstimate) - critical_value*sqrt(1/(N-3))
             LL <- tanh(LL)
             LL <- round(LL, 3)
-            gammaGLS_ci[i] <- paste0('[',LL,', ',UL,']')
+            gammaGLS_ci[p] <- paste0('[',LL,', ',UL,']')
         }
     }
 

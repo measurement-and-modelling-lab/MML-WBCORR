@@ -35,5 +35,3 @@ function (data) {
 
     return(m2_table)
 }
-
-

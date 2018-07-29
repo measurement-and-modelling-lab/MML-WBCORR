@@ -6,7 +6,6 @@ function (data, datatype, hypothesis, deletion, NList) {
         stop('The hypothesis matrix has the wrong number of columns.')
     }
 
-    
     ## There must be at least one fixed value hypothesis or one relational hypothesis
     if (!(0 %in% hypothesis[,4] || TRUE %in% duplicated(hypothesis[,4]))) {
         stop("The hypothesis matrix doesn't assert a testable hypothesis.")
