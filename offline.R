@@ -149,7 +149,7 @@ if (!identical(NA, gammahatDisplay)) {
 
 ## Print the significance of the test
 sigtable <- output[[4]]
-sigtable <- SensibleRounding(sigtable, 3)
+sigtable[,c(1,3)] <- SensibleRounding(sigtable[,c(1,3)], 3)
 cat("\nSignificance Test Results\n\n")
 tablegen(sigtable, TRUE)
 

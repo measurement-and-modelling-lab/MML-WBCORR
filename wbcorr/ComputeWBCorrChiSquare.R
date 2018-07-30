@@ -236,7 +236,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     ## If there are parameter tags, generate an estimates table
     if (no.parameters == FALSE) {
         gammahatDisplay <- cbind(parameters, lower.limit, gammahatGLS[,1], upper.limit, covgamma[,1])
-        colnames(gammahatDisplay) <- c("Parameter Tag", "Lower Bound*", "Estimate", "Upper Bound*", "Standard Error")
+        colnames(gammahatDisplay) <- c("Parameter Tag", "Lower Limit*", "Estimate", "Upper Limit*", "Standard Error")
         rownames(gammahatDisplay) <- NULL
     } else {
         gammahatDisplay <- NA

@@ -184,7 +184,7 @@ shinyServer(function(input, output, session) {
 
         ## Return significance test results
         sigtable <- output[[4]]
-        sigtable <- SensibleRounding(sigtable, 3)
+        sigtable[,c(1,3)] <- SensibleRounding(sigtable[,c(1,3)], 3)
         header <- "Significance Test Results"
         html.output <- paste0(html.output, htmlTable(sigtable, align="c", caption=header))
 
