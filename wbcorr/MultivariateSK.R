@@ -35,19 +35,8 @@ function(data) {
         MKT = (b2p-(p*(p+2)*(n-1)/(n+1)))/(sqrt((8*p*(p+2))/n))
         P2 = 2*(1-pnorm(abs(MKT), 0, 1))
 
-
-        source("./wbcorr/pRound.R")
-
-        ## Round and assemble the skewness test
-        b1p <- round(b1p, 3)
-        MST <- round(MST, 3)
-        P1 <- pRound(P1)
+        ## Assemble row of table
         skew_table[[i]] <- c(i, b1p, MST, df, P1)
-
-        ## Round and assemble the kurtosis test
-        b2p <- round(b1p, 3)
-        MKT <- round(MST, 3)
-        P2 <- pRound(P2)
         kurt_table[[i]] <- c(i, b2p, MKT, P2)
 
     }

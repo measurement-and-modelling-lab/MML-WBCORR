@@ -10,7 +10,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     assess_range <- dget("./wbcorr/assess_range.R")
     compute4thOrderMoments <- dget("./wbcorr/compute4thOrderMoments.R")
     errorcheck <- dget("./wbcorr/errorcheck.R")
-    fisherTransform <- dget("./wbcorr/fisherTransform.R")
+    ConfidenceInterval <- dget("./wbcorr/ConfidenceInterval.R")
     nCov <- dget("./wbcorr/nCov.R")
     pairwiseMVN <- dget("./wbcorr/pairwiseMVN.R")
 
@@ -210,7 +210,8 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
 
 	## Produce confidence intervals on parameter estimates (strict Bonferroni)
-	gammaGLS_ci <- c()
+	lower.limit <- c()
+        upper.limit <- c()
         for (p in 1:parameters.length) {
 
             ## Generate critical value
@@ -224,14 +225,8 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
             perGroupN <- NList[uniqueGroups]
             N <- perGroupN %*% groupFrequency
 
-            parameterEstimate <- gammahatGLS[p]
-            UL <- fisherTransform(parameterEstimate) + critical_value*sqrt(1/(N-3))
-            UL <- tanh(UL)
-            UL <- round(UL, 3)
-            LL <- fisherTransform(parameterEstimate) - critical_value*sqrt(1/(N-3))
-            LL <- tanh(LL)
-            LL <- round(LL, 3)
-            gammaGLS_ci[p] <- paste0('[',LL,', ',UL,']')
+            lower.limit[p] <- ConfidenceInterval(gammahatGLS[p], -critical_value, N)
+            upper.limit[p] <- ConfidenceInterval(gammahatGLS[p], critical_value, N)
         }
     }
 
@@ -240,11 +235,8 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
     ## If there are parameter tags, generate an estimates table
     if (no.parameters == FALSE) {
-        gammahatDisplay <- cbind(parameters, gammahatGLS[,1], covgamma[,1])
-        gammahatDisplay[,2:3] <- SensibleRounding(gammahatDisplay[,2:3], 3)
-        gammahatDisplay <- cbind(gammahatDisplay, gammaGLS_ci)
-        confidence.level <- round(100*(1-corrected_alpha), 3)
-        colnames(gammahatDisplay) <- c("Parameter Tag", "Estimate", "Standard Error", paste0(confidence.level,'% Confidence Interval'))
+        gammahatDisplay <- cbind(parameters, lower.limit, gammahatGLS[,1], upper.limit, covgamma[,1])
+        colnames(gammahatDisplay) <- c("Parameter Tag", "Lower Bound*", "Estimate", "Upper Bound*", "Standard Error")
         rownames(gammahatDisplay) <- NULL
     } else {
         gammahatDisplay <- NA
@@ -254,12 +246,12 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
     ## Round and assemble output
     sigtable <- matrix(c(fGLS, df, plevel), nrow=1, ncol=3)
-    sigtable <- SensibleRounding(sigtable, 3)
     colnames(sigtable) <- c("Chi Square", "df", "plevel")
     rownames(sigtable) <- NULL
 
     ## Return output tables
     output <- list(RList, RWLSList, gammahatDisplay, sigtable, MardiaSK, NList, hypothesis)
+
     return(output)
 
 }

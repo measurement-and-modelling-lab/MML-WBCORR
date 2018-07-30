@@ -67,7 +67,7 @@ if (file.exists) {
 
 
 ## Generate sample size list
-NList <- lapply(data, function(group) {
+NList <- sapply(data, simplify=TRUE, function(group) {
     nrow(group)
 })
 
@@ -103,8 +103,8 @@ for (i in 1:iterations) {
 
         gammahatDisplay <- test.result[[3]]
         parameter.tags <- gammahatDisplay[,1]
-        gammahatGLS <- gammahatDisplay[,2]
-        covgamma <- gammahatDisplay[,3]
+        gammahatGLS <- gammahatDisplay[,3]
+        covgamma <- gammahatDisplay[,5]
 
         labeled.estimates <- cbind('point estimate', parameter.tags, gammahatGLS)
         labeled.variances <- cbind('standard error', parameter.tags, covgamma)

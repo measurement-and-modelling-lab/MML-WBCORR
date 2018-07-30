@@ -2,6 +2,7 @@
 compute4thOrderMoments <- dget("./wbcorr/compute4thOrderMoments.R")
 ComputeWBCorrChiSquare <- dget("./wbcorr/ComputeWBCorrChiSquare.R")
 errorcheck <- dget("./wbcorr/errorcheck.R")
+SensibleRounding <- dget("./wbcorr/SensibleRounding.R")
 tablegen <- dget("./wbcorr/tablegen.R")
 
 
@@ -138,14 +139,17 @@ for (i in 1:data.length) {
 
 ## Print the parameter estimates
 gammahatDisplay <- output[[3]]
+gammahatDisplay[,2:5] <- SensibleRounding(gammahatDisplay[,2:5], 3) ## Round estimates
 if (!identical(NA, gammahatDisplay)) {
     cat("\n", estimation.method, "Parameter Estimates\n\n")
     tablegen(gammahatDisplay, TRUE)
+    cat(paste0("   * - ", 100 - 5/nrow(gammahatDisplay), "% confidence interval\n"))
 }
 
 
 ## Print the significance of the test
 sigtable <- output[[4]]
+sigtable <- SensibleRounding(sigtable, 3)
 cat("\nSignificance Test Results\n\n")
 tablegen(sigtable, TRUE)
 
@@ -154,14 +158,32 @@ tablegen(sigtable, TRUE)
 if (datatype == "rawdata") {
     MardiaSK <- output[[5]]
     if (deletion == "pairwise") {
+
+        marginals.table <- MardiaSK[[1]]
+        normality.table <- MardiaSK[[2]]
+
+        ## Round table
+        marginals.table[,4:5] <- SensibleRounding(marginals.table[,4:5], 3)
+        normality.table[,2:3] <- SensibleRounding(normality.table[,2:3], 3)
+        
         cat("\nAssessment of the Distribution of the Observed Marginals\n\n\n")
-        tablegen(MardiaSK[[1]], TRUE)
+        tablegen(marginals.table, TRUE)
         cat("\nAssessment of Multivariate Normality\n\n")
-        tablegen(MardiaSK[[2]], TRUE)
+        tablegen(normality.table, TRUE)
+
     } else {
+
+        skew.table <- MardiaSK[[1]]
+        kurt.table <- MardiaSK[[2]]
+
+        ## Round table
+        skew.table[,c(2,3,5)] <- SensibleRounding(skew.table[,c(2,3,5)])
+        kurt.table[,c(2:4)] <- SensibleRounding(kurt.table[,c(2:4)])
+        
         cat("\nAssessment of Multivariate Normality\n\n")
-        tablegen(MardiaSK[[1]], TRUE)
+        tablegen(skew.table, TRUE)
         cat("\n")
-        tablegen(MardiaSK[[2]], TRUE)
+        tablegen(kurt.table, TRUE)
+
     }
 }

@@ -1,7 +1,5 @@
 function (data) {
 
-    SensibleRounding <- dget("./wbcorr/SensibleRounding.R")
-
     m2_table <- list()
 
     for (jj in 1:length(data)) {
@@ -30,7 +28,6 @@ function (data) {
     }
 
     m2_table <- do.call(rbind, m2_table)
-    m2_table[,c(2,3,4)] <- SensibleRounding(m2_table[,c(2,3,4)])
     colnames(m2_table) <- c('Group','M<sub>2</sub>','plevel (two-tail)')
 
     return(m2_table)
