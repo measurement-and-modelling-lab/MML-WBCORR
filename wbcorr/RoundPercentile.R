@@ -1,12 +1,8 @@
 function (number) {
 
-    if (number < 0.001) {
-        number <- format(number, scientific=TRUE, digits=1)
-    } else if (number > 0.999) {
-        number <- paste0("1 - ", format(1-number, scientific=TRUE, digits=1))
-    } else {
-        number <- round(number, 3)
-    }
+    number <- round(number, 3)
+    number[number==0] <- "< 0.001"
+    number[number==1] <- "> 0.999"
 
     return(number)
 
