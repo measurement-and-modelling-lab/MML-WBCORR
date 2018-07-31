@@ -2,7 +2,7 @@ require(htmlTable) || install.packages(htmlTable)
 require(shiny) || install.packages(shiny)
 require(shinythemes) || install.packages(shinythemes)
 
-SensibleRounding <- dget("./wbcorr/SensibleRounding.R")
+RoundPercentile <- dget("./wbcorr/RoundPercentile.R")
 
 shinyServer(function(input, output, session) {
     options(shiny.maxRequestSize = 30 * 1024^2 )
@@ -171,8 +171,11 @@ shinyServer(function(input, output, session) {
         ## Print the parameter estimates
         gammahatDisplay <- output[[3]]
         if (is.matrix(gammahatDisplay)) {
-            gammahatDisplay <- gammahatDisplay[order(gammahatDisplay[,1]), , drop=FALSE] ## Order the estimates by parameter tag
-            gammahatDisplay[,2:5] <- SensibleRounding(gammahatDisplay[,2:5], 3) ## Round estimates
+
+            ## Order the estimates by parameter tag
+            gammahatDisplay <- gammahatDisplay[order(gammahatDisplay[,1]), , drop=FALSE]
+            gammahatDisplay <- round(gammahatDisplay, 3)
+
             if (!identical(NA, gammahatDisplay)) {
                 header <- paste0(estimation.method, " Parameter Estimates")
                 html.output <- paste0(html.output, htmlTable(gammahatDisplay,
@@ -182,9 +185,10 @@ shinyServer(function(input, output, session) {
             }
         }
 
-        ## Return significance test results
         sigtable <- output[[4]]
-        sigtable[,c(1,3)] <- SensibleRounding(sigtable[,c(1,3)], 3)
+        sigtable[,1] <- round(sigtable[,1], 3)
+        sigtable[,3] <- RoundPercentile(sigtable[,3])
+
         header <- "Significance Test Results"
         html.output <- paste0(html.output, htmlTable(sigtable, align="c", caption=header))
 
@@ -194,24 +198,27 @@ shinyServer(function(input, output, session) {
             MardiaSK <- output[[5]]
             if (deletion == "pairwise") {
 
-                marginals.table <- MardiaSK[[1]]
+                range.table <- MardiaSK[[1]]
                 normality.table <- MardiaSK[[2]]
 
-                ## Round table
-                marginals.table[,4:5] <- SensibleRounding(marginals.table[,4:5], 3)
-                normality.table[,2:3] <- SensibleRounding(normality.table[,2:3], 3)
+                range.table[,4] <- round(range.table[,4], 3)
+                range.table[,5] <- RoundPercentile(range.table[,5])
+
+                normality.table[,2] <- round(normality.table[,2], 3)
+                normality.table[,3] <- RoundPercentile(normality.table[,3])
 
                 ## Format html table
-                html.output <- paste0(html.output, htmlTable(marginals.table, align="c", caption="Assessment of the Distribution of the Observed Marginals"))
+                html.output <- paste0(html.output, htmlTable(range.table, align="c", caption="Assessment of the Distribution of the Observed Marginals"))
                 html.output <- paste0(html.output, htmlTable(normality.table, align="c", caption="Assessment of Multivariate Normality"))
             } else {
 
                 skew.table <- MardiaSK[[1]]
-                kurt.table <- MardiaSK[[2]]
+                skew.table[,-5] <- round(skew.table[,-5], 3)
+                skew.table[,5] <- RoundPercentile(skew.table[,5])
 
-                ## Round table
-                skew.table[,c(2,3,5)] <- SensibleRounding(skew.table[,c(2,3,5)])
-                kurt.table[,c(2:4)] <- SensibleRounding(kurt.table[,c(2:4)])
+                kurt.table <- MardiaSK[[2]]
+                kurt.table[,-4] <- round(kurt.table[,-4], 3)
+                kurt.table[,4] <- RoundPercentile(kurt.table[,4])
 
                 ## Format html table
                 html.output <- paste0(html.output, htmlTable(skew.table, align="c", caption="Assessment of Multivariate Skewness"))

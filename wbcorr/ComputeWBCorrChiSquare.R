@@ -4,7 +4,6 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     ComputeWLS <- dget("./wbcorr/ComputeWLS.R")
     GetVecR <- dget("./wbcorr/GetVecR.R")
     MultivariateSK <- dget("./wbcorr/MultivariateSK.R")
-    SensibleRounding <- dget("./wbcorr/SensibleRounding.R")
     adfCov <- dget("./wbcorr/adfCov.R")
     assess_mvn <- dget("./wbcorr/assess_mvn.R")
     assess_range <- dget("./wbcorr/assess_range.R")

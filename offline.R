@@ -2,9 +2,8 @@
 compute4thOrderMoments <- dget("./wbcorr/compute4thOrderMoments.R")
 ComputeWBCorrChiSquare <- dget("./wbcorr/ComputeWBCorrChiSquare.R")
 errorcheck <- dget("./wbcorr/errorcheck.R")
-SensibleRounding <- dget("./wbcorr/SensibleRounding.R")
 tablegen <- dget("./wbcorr/tablegen.R")
-
+RoundPercentile <- dget("./wbcorr/RoundPercentile.R")
 
 ## Stipulate data type
 cat("\nWhat type of data will you be using? 1. Raw data 2. Correlation data\n")
@@ -139,7 +138,8 @@ for (i in 1:data.length) {
 
 ## Print the parameter estimates
 gammahatDisplay <- output[[3]]
-gammahatDisplay[,2:5] <- SensibleRounding(gammahatDisplay[,2:5], 3) ## Round estimates
+gammahatDisplay <- gammahatDisplay[order(gammahatDisplay[,1]), , drop=FALSE]
+gammahatDisplay <- round(gammahatDisplay, 3)
 if (!identical(NA, gammahatDisplay)) {
     cat("\n", estimation.method, "Parameter Estimates\n\n")
     tablegen(gammahatDisplay, TRUE)
@@ -149,7 +149,9 @@ if (!identical(NA, gammahatDisplay)) {
 
 ## Print the significance of the test
 sigtable <- output[[4]]
-sigtable[,c(1,3)] <- SensibleRounding(sigtable[,c(1,3)], 3)
+sigtable[,1] <- round(sigtable[,1], 3)
+sigtable[,3] <- RoundPercentile(sigtable[,3])
+
 cat("\nSignificance Test Results\n\n")
 tablegen(sigtable, TRUE)
 
@@ -159,15 +161,17 @@ if (datatype == "rawdata") {
     MardiaSK <- output[[5]]
     if (deletion == "pairwise") {
 
-        marginals.table <- MardiaSK[[1]]
+        range.table <- MardiaSK[[1]]
         normality.table <- MardiaSK[[2]]
 
-        ## Round table
-        marginals.table[,4:5] <- SensibleRounding(marginals.table[,4:5], 3)
-        normality.table[,2:3] <- SensibleRounding(normality.table[,2:3], 3)
-        
+        range.table[,4] <- round(range.table[,4], 3)
+        range.table[,5] <- RoundPercentile(range.table[,5])
+
+        normality.table[,2] <- round(normality.table[,2], 3)
+        normality.table[,3] <- RoundPercentile(normality.table[,3])
+
         cat("\nAssessment of the Distribution of the Observed Marginals\n\n\n")
-        tablegen(marginals.table, TRUE)
+        tablegen(range.table, TRUE)
         cat("\nAssessment of Multivariate Normality\n\n")
         tablegen(normality.table, TRUE)
 
@@ -176,9 +180,13 @@ if (datatype == "rawdata") {
         skew.table <- MardiaSK[[1]]
         kurt.table <- MardiaSK[[2]]
 
-        ## Round table
-        skew.table[,c(2,3,5)] <- SensibleRounding(skew.table[,c(2,3,5)])
-        kurt.table[,c(2:4)] <- SensibleRounding(kurt.table[,c(2:4)])
+        skew.table <- MardiaSK[[1]]
+        skew.table[,-5] <- round(skew.table[,-5], 3)
+        skew.table[,5] <- RoundPercentile(skew.table[,5])
+
+        kurt.table <- MardiaSK[[2]]
+        kurt.table[,-4] <- round(kurt.table[,-4], 3)
+        kurt.table[,4] <- RoundPercentile(kurt.table[,4])
         
         cat("\nAssessment of Multivariate Normality\n\n")
         tablegen(skew.table, TRUE)
