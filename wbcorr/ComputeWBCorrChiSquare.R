@@ -35,6 +35,15 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
         }
     }
 
+    ## Make the hypothesis refer exclusively to the lower triangle
+    for (i in 1:nrow(hypothesis)) {
+        if (hypothesis[i,2] < hypothesis[i,3]) {
+            row <- hypothesis[i,2]
+            col <- hypothesis[i,3]
+            hypothesis[i,2] <- col
+            hypothesis[i,3] <- row
+        }
+    }
 
     ## Check for a variety of problems
     errorcheck(data, datatype, hypothesis, deletion, NList)
