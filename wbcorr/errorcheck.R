@@ -27,6 +27,8 @@ function (data, datatype, hypothesis, deletion, NList) {
         stop('The hypothesis matrix references a non-existent group.')
     } else if (TRUE %in% duplicated(hypothesis[,1:3])) {
         stop('The hypothesis matrix references the same correlation twice.')
+    } else if (TRUE %in% (hypothesis[,2] > hypothesis[,1])) {
+        stop('The hypothesis matrix should pertain to the lower half of the correlation matrix (or matrices).')
     }
 
     for (i in 1:nrow(hypothesis)) {
