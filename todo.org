@@ -1,3 +1,7 @@
+ - Remove header and equate to X_1, X_2, etc. in output?
+   - What if their variables are simply numbered 1, 2, etc.? Then that would be included as data
+ - Are the multivariate skew/kurtosis centered at 0 or 3?
  - Check that the pairwise MVN test actually works
+ - Check that the omnibus MVN test works
  - Should the harmonised mean of the Ns in pairwise deletion be rounded?
- - Is it ok to use scientific notation for values under 0.001?
+ - Scientific notation vs. "< 0.001"

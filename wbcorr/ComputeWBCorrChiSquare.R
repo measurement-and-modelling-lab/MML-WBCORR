@@ -117,8 +117,6 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     ## Create a list of the correlations referenced in the hypothesis matrix
     VecR <- GetVecR(RList, hypothesis)
 
-    hypothesis.rows <- nrow(hypothesis)
-
 
     ## Amend N to match the deletion method
     if (deletion == 'pairwise') {
@@ -148,7 +146,6 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     no.parameters <- max(hypothesis[,4]) == 0
 
 
-
     ## Create a vector of fixed values
     hypothesis[hypothesis[,4] != 0, 5] <- 0
     rhostar <- hypothesis[,5,drop=FALSE]
@@ -165,6 +162,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
 
     ## Create OLS matrices from WLS (OLS?) estimates
     RWLSList <- RList
+    hypothesis.rows <- nrow(hypothesis)
     for (kk in 1:hypothesis.rows) {
         a <- hypothesis[kk,1]
         i <- hypothesis[kk,2]
@@ -208,6 +206,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     if (no.parameters) {
         e <- rstar
         df <- hypothesis.rows
+        gammahatDisplay <- NA
     } else {
         Psi <- t(delta)%*%OmegaHatInverse
         covgamma <- solve(Psi%*%delta)
@@ -215,8 +214,6 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
         e <- rstar-delta%*%gammahatGLS
         df <- hypothesis.rows - parameters.length
 	
-
-
 	## Produce confidence intervals on parameter estimates (strict Bonferroni)
 	lower.limit <- c()
         upper.limit <- c()
@@ -236,20 +233,15 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
             lower.limit[p] <- ConfidenceInterval(gammahatGLS[p], -critical_value, N)
             upper.limit[p] <- ConfidenceInterval(gammahatGLS[p], critical_value, N)
         }
+
+        ## Construct estimates table
+        gammahatDisplay <- cbind(parameters, lower.limit, gammahatGLS[,1], upper.limit, covgamma[,1])
+        colnames(gammahatDisplay) <- c("Parameter Tag", "Lower Limit*", "Estimate", "Upper Limit*", "Standard Error")
+        rownames(gammahatDisplay) <- NULL
     }
 
     temp <- t(e)%*%OmegaHatInverse%*%e
     fGLS <- temp[[1,1]] ## chi square statistic
-
-    ## If there are parameter tags, generate an estimates table
-    if (no.parameters == FALSE) {
-        gammahatDisplay <- cbind(parameters, lower.limit, gammahatGLS[,1], upper.limit, covgamma[,1])
-        colnames(gammahatDisplay) <- c("Parameter Tag", "Lower Limit*", "Estimate", "Upper Limit*", "Standard Error")
-        rownames(gammahatDisplay) <- NULL
-    } else {
-        gammahatDisplay <- NA
-    }
-
     plevel <- 1-pchisq(fGLS,df)
 
     ## Round and assemble output
