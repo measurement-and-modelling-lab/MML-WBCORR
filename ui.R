@@ -99,7 +99,7 @@ shinyUI(fluidPage(theme = "simplex.css",
     mainPanel(
       tabsetPanel(
         id = "inTabset",
-        #tabPanel(value = "about", "About", includeHTML("./documentation/about.html")),
+        tabPanel(value = "about", "About", includeHTML("./documentation/about.html")),
         tabPanel(value = "readme1", "Formatting input", includeHTML("./documentation/input.html")),
         tabPanel(value = "readme2", "Choosing a method", includeHTML("./documentation/method.html")),
         tabPanel(value = "readme3", "Interpreting output", includeHTML("./documentation/output.html")),
