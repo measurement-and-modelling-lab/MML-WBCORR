@@ -38,7 +38,10 @@ for (i in 1:data.length) {
     filename <- files[[i]]
     file.exists <- file.exists(filename)
     if (file.exists) {
-        data[[i]] <- read.csv(file=filename,head=FALSE, sep=",")
+        cat("\n", file=filename, append = TRUE) ## append the necessary line break to the end
+        tryCatch(data[[i]] <- read.csv(file=filename,head=FALSE, sep=","),
+                 warning = function(w) stop("There was a problem reading one of your data files."),
+                 error = function(e) stop("There was a problem reading one of your data files."))
         data[[i]] <- as.matrix(data[[i]])
     } else {
         stop("Data file does not exist.")
@@ -50,7 +53,10 @@ for (i in 1:data.length) {
 hypothesis.file <- files[[length(files)]]
 file.exists <- file.exists(hypothesis.file)
 if (file.exists) {
-    hypothesis <- read.csv(file=hypothesis.file,head=FALSE)
+    cat("\n", file=hypothesis.file, append = TRUE) ## append the necessary line break to the end
+    tryCatch(hypothesis <- read.csv(file=hypothesis.file,head=FALSE, sep=","),
+             warning = function(w) stop("There was a problem reading your hypothesis file."),
+             error = function(e) stop("There was a problem reading your hypothesis file.."))
     hypothesis <- as.matrix(hypothesis)
 } else {
     stop("Hypothesis file does not exist")
