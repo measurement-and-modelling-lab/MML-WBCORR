@@ -112,7 +112,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     } else {
         MardiaSK <- NA
     }
-    
+
 
     ## Create a list of the correlations referenced in the hypothesis matrix
     VecR <- GetVecR(RList, hypothesis)
@@ -213,9 +213,9 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
         gammahatGLS <- covgamma%*%Psi%*%rstar
         e <- rstar-delta%*%gammahatGLS
         df <- hypothesis.rows - parameters.length
-	
-	## Produce confidence intervals on parameter estimates (strict Bonferroni)
-	lower.limit <- c()
+
+        ## Produce confidence intervals on parameter estimates (strict Bonferroni)
+        lower.limit <- c()
         upper.limit <- c()
         for (p in 1:parameters.length) {
 
