@@ -8,16 +8,16 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     assess_mvn <- dget("./wbcorr/assess_mvn.R")
     assess_range <- dget("./wbcorr/assess_range.R")
     compute4thOrderMoments <- dget("./wbcorr/compute4thOrderMoments.R")
+    dyn.load("./wbcorr/compute4thOrderMoments.so")
     errorcheck <- dget("./wbcorr/errorcheck.R")
     ConfidenceInterval <- dget("./wbcorr/ConfidenceInterval.R")
     nCov <- dget("./wbcorr/nCov.R")
     pairwiseMVN <- dget("./wbcorr/pairwiseMVN.R")
 
-
     ## Get the number of samples
     data.length <- length(data)
 
-    
+
     ## If the upper triangle of a correlation matrix is empty, make the matrix symmetric
     ## Otherwise, check whether the matrix is symmetric and if not return an error
     if (datatype == "correlation") {
