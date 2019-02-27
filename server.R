@@ -134,13 +134,19 @@ shinyServer(function(input, output, session) {
 
         ## Print the original hypothesis matrix
         hypothesis.colnames <- c("Group", "Row", "Column", "Parameter Tag", "Fixed Value")
-        html.output <- paste0(html.output, htmlTable(hypothesis, align="c", caption="Input Hypothesis Matrix", header=hypothesis.colnames))
+        html.output <- paste0(html.output, htmlTable(hypothesis,
+                                                     align="c",
+                                                     caption="Input Hypothesis Matrix",
+                                                     header=hypothesis.colnames))
 
 
         ## Print the amended hypothesis matrix, if changes were made
         hypothesis.amended <- output[[6]]
         if (!all(hypothesis == hypothesis.amended)) {
-            html.output <- paste0(html.output, htmlTable(hypothesis.amended, align="c", caption="Amended Hypothesis Matrix", header=hypothesis.colnames))
+            html.output <- paste0(html.output, htmlTable(hypothesis.amended,
+                                                         align="c",
+                                                         caption="Amended Hypothesis Matrix",
+                                                         header=hypothesis.colnames))
         }
 
 
@@ -152,7 +158,13 @@ shinyServer(function(input, output, session) {
             variables <- nrow(RList[[i]])
             labels <- paste0("<b>X<sub>", 1:variables, "</sub></b>")
             caption <- paste0("Input Correlation Matrix #", i, " (N=", NList[i], ")")
-            html.output <- paste0(html.output, htmlTable(RList[[i]], align="r", caption=caption, rnames=labels, header=labels, align.header="r", css.cell = "padding-left: .5em; padding-right: .2em;"))
+            html.output <- paste0(html.output, htmlTable(RList[[i]],
+                                                         align="r",
+                                                         caption=caption,
+                                                         rnames=labels,
+                                                         header=labels,
+                                                         align.header="r",
+                                                         css.cell = "padding-left: .5em; padding-right: .2em;"))
         }
 
 
@@ -164,7 +176,13 @@ shinyServer(function(input, output, session) {
             variables <- nrow(RList[[i]])
             labels <- paste0("<b>X<sub>", 1:variables, "</sub></b>")
             caption <- paste0("OLS Matrix #", i, " (N=", NList[i], ")")
-            html.output <- paste0(html.output, htmlTable(RWLSList[[i]], align="r", caption=caption, rnames=labels, header=labels, align.header="r", css.cell = "padding-left: .5em; padding-right: .2em;"))
+            html.output <- paste0(html.output, htmlTable(RWLSList[[i]],
+                                                         align="r",
+                                                         caption=caption,
+                                                         rnames=labels,
+                                                         header=labels,
+                                                         align.header="r",
+                                                         css.cell = "padding-left: .5em; padding-right: .2em;"))
         }
 
 
@@ -177,7 +195,7 @@ shinyServer(function(input, output, session) {
             gammahatDisplay <- round(gammahatDisplay, 3)
 
             if (!identical(NA, gammahatDisplay)) {
-                header <- paste0(estimation.method, "Null Parameter Estimates")
+                header <- paste0(estimation.method, " Null Parameter Estimates")
                 html.output <- paste0(html.output, htmlTable(gammahatDisplay,
                                                              align="c",
                                                              tfoot=paste0("* - ", 100 - 5/nrow(gammahatDisplay), "% confidence interval"),
