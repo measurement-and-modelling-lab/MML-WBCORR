@@ -119,4 +119,3 @@ shinyUI(fluidPage(theme = "simplex.css",
      </div><br>')
 )
 )
-)

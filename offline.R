@@ -106,7 +106,7 @@ if (datatype == "rawdata") {
 output <- ComputeWBCorrChiSquare(data, NList, hypothesis, datatype, estimation.method, deletion)
 
 
-NList <- output[[6]]
+NList <- output[[5]]
 
 
 ## Print the original hypothesis matrix
@@ -116,7 +116,7 @@ tablegen(hypothesis, TRUE)
 
 
 ## Print the amended hypothesis matrix
-hypothesis.amended <- output[[7]]
+hypothesis.amended <- output[[6]]
 if (!all(hypothesis == hypothesis.amended)) {
     cat("\nAmended Hypothesis Matrix\n\n")
     colnames(hypothesis.amended) <- c("Group", "Row", "Column", "Parameter Tag", "Fixed Value")
@@ -161,43 +161,4 @@ sigtable[,3] <- RoundPercentile(sigtable[,3])
 cat("\nSignificance Test Results\n\n")
 tablegen(sigtable, TRUE)
 
-
-## Print MVN test
-if (datatype == "rawdata") {
-    MardiaSK <- output[[5]]
-    if (deletion == "pairwise") {
-
-        range.table <- MardiaSK[[1]]
-        normality.table <- MardiaSK[[2]]
-
-        range.table[,4] <- round(range.table[,4], 3)
-        range.table[,5] <- RoundPercentile(range.table[,5])
-
-        normality.table[,2] <- round(normality.table[,2], 3)
-        normality.table[,3] <- RoundPercentile(normality.table[,3])
-
-        cat("\nAssessment of the Distribution of the Observed Marginals\n\n\n")
-        tablegen(range.table, TRUE)
-        cat("\nAssessment of Multivariate Normality\n\n")
-        tablegen(normality.table, TRUE)
-
-    } else {
-
-        skew.table <- MardiaSK[[1]]
-        kurt.table <- MardiaSK[[2]]
-
-        skew.table <- MardiaSK[[1]]
-        skew.table[,-5] <- round(skew.table[,-5], 3)
-        skew.table[,5] <- RoundPercentile(skew.table[,5])
-
-        kurt.table <- MardiaSK[[2]]
-        kurt.table[,-4] <- round(kurt.table[,-4], 3)
-        kurt.table[,4] <- RoundPercentile(kurt.table[,4])
-        
-        cat("\nAssessment of Multivariate Normality\n\n")
-        tablegen(skew.table, TRUE)
-        cat("\n")
-        tablegen(kurt.table, TRUE)
-
-    }
 }

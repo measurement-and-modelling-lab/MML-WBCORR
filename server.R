@@ -129,7 +129,7 @@ shinyServer(function(input, output, session) {
 
 
         html.output <- ""
-        NList <- output[[6]] ## Import amended sample sizes
+        NList <- output[[5]] ## Import amended sample sizes
 
 
         ## Print the original hypothesis matrix
@@ -138,7 +138,7 @@ shinyServer(function(input, output, session) {
 
 
         ## Print the amended hypothesis matrix, if changes were made
-        hypothesis.amended <- output[[7]]
+        hypothesis.amended <- output[[6]]
         if (!all(hypothesis == hypothesis.amended)) {
             html.output <- paste0(html.output, htmlTable(hypothesis.amended, align="c", caption="Amended Hypothesis Matrix", header=hypothesis.colnames))
         }
@@ -177,7 +177,7 @@ shinyServer(function(input, output, session) {
             gammahatDisplay <- round(gammahatDisplay, 3)
 
             if (!identical(NA, gammahatDisplay)) {
-                header <- paste0(estimation.method, " Parameter Estimates")
+                header <- paste0(estimation.method, "Null Parameter Estimates")
                 html.output <- paste0(html.output, htmlTable(gammahatDisplay,
                                                              align="c",
                                                              tfoot=paste0("* - ", 100 - 5/nrow(gammahatDisplay), "% confidence interval"),
@@ -191,80 +191,6 @@ shinyServer(function(input, output, session) {
 
         header <- "Significance Test Results"
         html.output <- paste0(html.output, htmlTable(sigtable, align="c", caption=header))
-
-
-        ## Print MVN test
-        if (datatype == "rawdata") {
-            MardiaSK <- output[[5]]
-            if (deletion == "pairwise") {
-
-                range.table <- MardiaSK[[1]]
-                normality.table <- MardiaSK[[2]]
-
-                if (data.length > 1) {
-
-                    omnibus.chisq <- sum(normality.table[,2]^2)
-                    omnibus.p <- 1 - pchisq(omnibus.chisq, data.length)
-                    omnibus.table <- matrix(c(omnibus.chisq, data.length, omnibus.p), nrow=1)
-
-                    colnames(omnibus.table) <- c("Chi Square", "df", "plevel")
-
-                    omnibus.table[,-3] <- round(omnibus.table[,-3], 3)
-                    omnibus.table[,3] <- RoundPercentile(omnibus.table[,3])
-
-                    html.output <- paste0(html.output, htmlTable(omnibus.table, align="c", caption="Omnibus MVN Test"))
-
-                }
-
-                range.table[,4] <- round(range.table[,4], 3)
-                range.table[,5] <- RoundPercentile(range.table[,5])
-
-                normality.table[,2] <- round(normality.table[,2], 3)
-                normality.table[,3] <- RoundPercentile(normality.table[,3])
-                
-                ## Format html table
-                html.output <- paste0(html.output, htmlTable(range.table, align="c", caption="Assessment of the Distribution of the Observed Marginals"))
-                html.output <- paste0(html.output, htmlTable(normality.table, align="c", caption="Assessment of Multivariate Normality"))
-
-            } else {
-
-                skew.table <- MardiaSK[[1]]
-                kurt.table <- MardiaSK[[2]]
-
-                if (data.length > 1) {
-
-                    omnibus.MST <- sum(skew.table[,3])
-                    omnibus.df <- sum(skew.table[,4])
-                    omnibus.P1 <- 1 - pchisq(omnibus.MST, omnibus.df)
-                    skew.omnibus <- c(omnibus.MST, omnibus.df, omnibus.P1)
-
-                    omnibus.MKT <- sum(kurt.table[,3]^2)
-                    omnibus.P2 <- 1 - pchisq(omnibus.MKT, data.length)
-                    kurt.omnibus <- c(omnibus.MKT, data.length, omnibus.P2)
-
-                    omnibus.table <- rbind(skew.omnibus, kurt.omnibus)
-                    rownames(omnibus.table) <- c("Skewness", "Kurtosis")
-                    colnames(omnibus.table) <- c("Chi Square", "df", "plevel")
-
-                    omnibus.table[,-3] <- round(omnibus.table[,-3], 3)
-                    omnibus.table[,3] <- RoundPercentile(omnibus.table[,3])
-
-                    html.output <- paste0(html.output, htmlTable(omnibus.table, align="c", caption="Omnibus MVN Tests"))
-
-                }
-
-                skew.table[,-5] <- round(skew.table[,-5], 3)
-                skew.table[,5] <- RoundPercentile(skew.table[,5])
-
-                kurt.table[,-4] <- round(kurt.table[,-4], 3)
-                kurt.table[,4] <- RoundPercentile(kurt.table[,4])
-
-                ## Format html table
-                html.output <- paste0(html.output, htmlTable(skew.table, align="c", caption="Assessment of Multivariate Skewness"))
-                html.output <- paste0(html.output, htmlTable(kurt.table, align="c", caption="Assessment of Multivariate Kurtosis"))
-
-            }
-        }
 
         HTML(html.output)
 

@@ -3,16 +3,12 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     ## Import functions
     ComputeWLS <- dget("./wbcorr/ComputeWLS.R")
     GetVecR <- dget("./wbcorr/GetVecR.R")
-    MultivariateSK <- dget("./wbcorr/MultivariateSK.R")
     adfCov <- dget("./wbcorr/adfCov.R")
-    assess_mvn <- dget("./wbcorr/assess_mvn.R")
-    assess_range <- dget("./wbcorr/assess_range.R")
     compute4thOrderMoments <- dget("./wbcorr/compute4thOrderMoments.R")
     dyn.load("./wbcorr/compute4thOrderMoments.so")
     errorcheck <- dget("./wbcorr/errorcheck.R")
     ConfidenceInterval <- dget("./wbcorr/ConfidenceInterval.R")
     nCov <- dget("./wbcorr/nCov.R")
-    pairwiseMVN <- dget("./wbcorr/pairwiseMVN.R")
 
     ## Get the number of samples
     data.length <- length(data)
@@ -99,24 +95,8 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
         }
     }
 
-
-    ## Assess multivariate normality using Yuan, Lambert & Fouladi (2004) if using pairwise deletion, Mardia (1970) otherwise
-    if (datatype == 'rawdata') {
-        if (deletion == 'pairwise') {
-            temp <- assess_range(data)
-            MardiaSK <- list(temp[[1]], assess_mvn(data))
-            missing <- temp[[2]]
-        } else {
-            MardiaSK <- MultivariateSK(data)
-        }
-    } else {
-        MardiaSK <- NA
-    }
-
-
     ## Create a list of the correlations referenced in the hypothesis matrix
     VecR <- GetVecR(RList, hypothesis)
-
 
     ## Amend N to match the deletion method
     if (deletion == 'pairwise') {
@@ -250,7 +230,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
     rownames(sigtable) <- NULL
 
     ## Return output tables
-    output <- list(RList, RWLSList, gammahatDisplay, sigtable, MardiaSK, NList, hypothesis)
+    output <- list(RList, RWLSList, gammahatDisplay, sigtable, NList, hypothesis)
 
     return(output)
 
