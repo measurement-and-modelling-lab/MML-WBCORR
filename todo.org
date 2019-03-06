@@ -5,3 +5,4 @@
  - Check that the omnibus MVN test works
  - Should the harmonised mean of the Ns in pairwise deletion be rounded?
  - Scientific notation vs. "< 0.001"
+ - Check for NA values in hypothesis csv

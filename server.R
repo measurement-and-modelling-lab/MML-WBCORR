@@ -5,8 +5,10 @@ require(shinythemes) || install.packages(shinythemes)
 RoundPercentile <- dget("./wbcorr/RoundPercentile.R")
 
 shinyServer(function(input, output, session) {
-    options(shiny.maxRequestSize = 30 * 1024^2 )
 
+    options(shiny.maxRequestSize = 30 * 1024^2 ) ## max file size
+
+    ## Don't hide errors from the user
     observe({
         options(shiny.sanitize.errors = FALSE)
     })
@@ -14,9 +16,13 @@ shinyServer(function(input, output, session) {
     output$estimationmethodInput <- renderUI({
         html_ui <- " "
         if (input$datatype == "rawdata") {
-            html_ui <- paste0(radioButtons("estimationmethod", "Estimation method:", c("GLS" = "GLS", "TSGLS" = "TSGLS", "ADF" = "ADF", "TSADF" = "TSADF")))
+            html_ui <- paste0(radioButtons("estimationmethod",
+                                           "Estimation method:",
+                                           c("GLS" = "GLS", "TSGLS" = "TSGLS", "ADF" = "ADF", "TSADF" = "TSADF")))
         } else {
-            html_ui <- paste0(radioButtons("estimationmethod", "Estimation method:", c("GLS" ="GLS", "TSGLS" = "TSGLS")))
+            html_ui <- paste0(radioButtons("estimationmethod",
+                                           "Estimation method:",
+                                           c("GLS" ="GLS", "TSGLS" = "TSGLS")))
         }
         HTML(html_ui)
     })
@@ -149,9 +155,32 @@ shinyServer(function(input, output, session) {
                                                          header=hypothesis.colnames))
         }
 
+        ## Print the parameter 
+        RList <- output[[1]]
+        parameter_tables <- lapply(RList, function(mat) {
+            mat[,] <- "NA"
+            return(mat)
+        })
+
+        for (i in 1:nrow(hypothesis)) {
+            group <- hypothesis[i, 1]
+            row <- hypothesis[i, 2]
+            col <- hypothesis[i, 3]
+            parameter <- hypothesis[i, 4]
+            parameter_tables[[group]][row, col] <- parameter
+        }
+
+        for (i in 1:data.length) {
+            variables <- nrow(parameter_tables[[i]])
+            labels <- paste0("<b>X<sub>", 1:variables, "</sub></b>")
+            html.output <- paste0(html.output, htmlTable(parameter_tables[[i]],
+                                                         header=labels,
+                                                         rnames=labels,
+                                                         align="r",
+                                                         caption=paste0("Parameter Table #", i)))
+        }
 
         ## Print the correlation matrices
-        RList <- output[[1]]
         for (i in 1:data.length) {
             rownames(RList[[i]]) <- colnames(RList[[i]]) <- lapply(1:nrow(RList[[i]]), function(i) "")
             RList[[i]] <- round(RList[[i]], 3)
@@ -214,6 +243,7 @@ shinyServer(function(input, output, session) {
 
     })
 
+    ## Switch to the output panel when the user clicks the run button
     observeEvent(input$runButton, {
         updateTabsetPanel(session, "inTabset", 'out')
     })
