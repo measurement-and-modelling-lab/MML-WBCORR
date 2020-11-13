@@ -34,11 +34,11 @@ function myFunction() {
         <i class="fa fa-bars"></i>
       </a>
       <b class="title">Measurement and Modelling Lab &nbsp; - &nbsp; Tools</b><br class="rwd-break" id="row-break"><br class="rwd-break" id="row-break2">
-      <a href="https://shiny.rcg.sfu.ca/u/tmustaph/MML-R2/"><font color="#00ca8a">MML-R2</font></a>
-      <a href="https://shiny.rcg.sfu.ca/u/tmustaph/MML-Multicorr/"><font color="white">MML-Multicorr</font></a>
-      <a href="https://shiny.rcg.sfu.ca/u/tmustaph/MML-WBCORR/"><font color="white">MML-WBCORR</font></a>
-      <a href="https://shiny.rcg.sfu.ca/u/tmustaph/csv-generator/"><font color="white">CSV Generator</font></a>
-      <a href="https://shiny.rcg.sfu.ca/u/tmustaph/distribution-tests/"><font color="white">Distribution Tests</font></a>
+      <a href="https://shiny.rcg.sfu.ca/u/zrauf/MML-R2/"><font color="white">MML-R2</font></a>
+      <a href="https://shiny.rcg.sfu.ca/u/zrauf/MML-Multicorr/"><font color="white">MML-Multicorr</font></a>
+      <a href="https://shiny.rcg.sfu.ca/u/zrauf/MML-WBCORR/"><font color="#00ca8a">MML-WBCORR</font></a>
+      <a href="https://shiny.rcg.sfu.ca/u/zrauf/csv-generator/"><font color="white">CSV Generator</font></a>
+      <a href="https://shiny.rcg.sfu.ca/u/zrauf/distribution-tests/"><font color="white">Distribution Tests</font></a>
 
     </div>
     </div>
