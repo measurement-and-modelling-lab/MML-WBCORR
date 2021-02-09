@@ -215,7 +215,7 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
         }
 
         ## Construct estimates table
-        gammahatDisplay <- cbind(parameters, lower.limit, gammahatGLS[,1], upper.limit, covgamma[,1])
+        gammahatDisplay <- cbind(parameters, lower.limit, gammahatGLS[,1], upper.limit, sqrt(covgamma[,1]))
         colnames(gammahatDisplay) <- c("Parameter Tag", "Lower Limit*", "Estimate", "Upper Limit*", "Standard Error")
         rownames(gammahatDisplay) <- NULL
     }
