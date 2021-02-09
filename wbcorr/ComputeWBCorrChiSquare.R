@@ -215,8 +215,12 @@ function (data, NList, hypothesis, datatype, estimationmethod, deletion) {
         }
 
         ## Construct estimates table
-        gammahatDisplay <- cbind(parameters, lower.limit, gammahatGLS[,1], upper.limit, sqrt(covgamma[,1]))
-        colnames(gammahatDisplay) <- c("Parameter Tag", "Lower Limit*", "Estimate", "Upper Limit*", "Standard Error")
+        ## Gave incorrect standard errors: Need to fix SES Gamma hat display
+        ## gammahatDisplay <- cbind(parameters, lower.limit, gammahatGLS[,1], upper.limit, sqrt(covgamma[,1]))
+        ## Need to fix SES ColNames gammahat display  
+        ## colnames(gammahatDisplay) <- c("Parameter Tag", "Lower Limit*", "Estimate", "Upper Limit*", "Standard Error")
+        gammahatDisplay <- cbind(parameters, lower.limit, gammahatGLS[,1], upper.limit)
+        colnames(gammahatDisplay) <- c("Parameter Tag", "Lower Limit*", "Estimate", "Upper Limit*")
         rownames(gammahatDisplay) <- NULL
     }
 
