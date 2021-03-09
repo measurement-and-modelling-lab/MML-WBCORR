@@ -125,12 +125,15 @@ function myFunction() {
                   HTML('
     <link rel="stylesheet" type="text/css" href="index.css">
     <div class="bar2">
+     <b class="bottom2">
+     <a href="https://shiny.rcg.sfu.ca/u/zrauf/bug-report/" target="_blank" rel="noopener noreferrer"><font color=white>Report a Bug</font></a>
+     </b>
      <b class="bottom">
      <font color="#717171">Provided by the</font>
      <a href="http://members.psyc.sfu.ca/labs/mml"><font color=white>Measurement and Modelling Lab</font></a>
      <font color="#717171"> at</font>
      <a href="https://www.sfu.ca/"><font color=white> SFU</font></a>
      </b>
-     </div><br>')
+')
 )
 )
